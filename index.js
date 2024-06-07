@@ -55,7 +55,7 @@ const { state, saveCreds } = await useMultiFileAuthState('./qr-seccion')
   
   //conexion
 
-    const vm = makeWAvmet({
+const vm = makeWAvmet({
       auth: state,
       logger: P({ level: 'silent' }),
       auth: state,
@@ -132,23 +132,23 @@ vm.ev.on('contacts.set', () => {
     console.log('Team contactos', Object.values(store.contacts))
 })
 
- vm.ev.on('messages.upsert', async m => {
- try {
- const info = m.messages[0]
- if (!info.message) return 
- if (info.key && info.key.remoteJid == "status@broadcast") return
- const altpdf = Object.keys(info.message)
- const type = altpdf[0] == "senderKeyDistributionMessage" ? altpdf[1] == "messageContextInfo" ? altpdf[2] : altpdf[1] : altpdf[0]
+vm.ev.on('messages.upsert', async m => {
+try {
+const info = m.messages[0]
+if (!info.message) return 
+if (info.key && info.key.remoteJid == "status@broadcast") return
+const altpdf = Object.keys(info.message)
+const type = altpdf[0] == "senderKeyDistributionMessage" ? altpdf[1] == "messageContextInfo" ? altpdf[2] : altpdf[1] : altpdf[0]
 const content = JSON.stringify(info.message)
 const from = info.key.remoteJid
- var body = (type === 'conversation') ? info.message.conversation : (type == 'imageMessage') ? info.message.imageMessage.caption : (type == 'videoMessage') ? info.message.videoMessage.caption : (type == 'extendedTextMessage') ? info.message.extendedTextMessage.text : ''
+var body = (type === 'conversation') ? info.message.conversation : (type == 'imageMessage') ? info.message.imageMessage.caption : (type == 'videoMessage') ? info.message.videoMessage.caption : (type == 'extendedTextMessage') ? info.message.extendedTextMessage.text : ''
 
 const budy = (type === "conversation") ? info.message.conversation : (type === "viewOnceMessageV2") ? info.message.viewOnceMessageV2.message.imageMessage ? info.message.viewOnceMessageV2.message.imageMessage.caption : info.message.viewOnceMessageV2.message.videoMessage.caption : (type === "imageMessage") ? info.message.imageMessage.caption : (type === "videoMessage") ? info.message.videoMessage.caption : (type === "extendedTextMessage") ? info.message.extendedTextMessage.text : (type === "viewOnceMessage") ? info.message.viewOnceMessage.message.videoMessage ? info.message.viewOnceMessage.message.videoMessage.caption : info.message.viewOnceMessage.message.imageMessage.caption : (type === "documentWithCaptionMessage") ? info.message.documentWithCaptionMessage.message.documentMessage.caption : (type === "buttonsMessage") ? info.message.buttonsMessage.imageMessage.caption : (type === "buttonsResponseMessage") ? info.message.buttonsResponseMessage.selectedButtonId : (type === "listResponseMessage") ? info.message.listResponseMessage.singleSelectReply.selectedRowId : (type === "templateButtonReplyMessage") ? info.message.templateButtonReplyMessage.selectedId : (type === "groupInviteMessage") ? info.message.groupInviteMessage.caption : (type === "pollCreationMessageV3") ? info.message.pollCreationMessageV3 : (type === "interactiveResponseMessage") ? JSON.parse(info.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson).id : (type === "text") ? info.text : "" 
 
 var pes = (type === 'conversation' && info.message.conversation) ? info.message.conversation : (type == 'imageMessage') && info.message.imageMessage.caption ? info.message.imageMessage.caption : (type == 'videoMessage') && info.message.videoMessage.caption ? info.message.videoMessage.caption : (type == 'extendedTextMessage') && info.message.extendedTextMessage.text ? info.message.extendedTextMessage.text : ''
 
 // CONSTANTES IS  
- const isGrupo = info.key.remoteJid.endsWith('@g.us')
+const isGrupo = info.key.remoteJid.endsWith('@g.us')
 const sender = isGrupo ? info.key.participant : info.key.remoteJid
 const groupMetadata = isGrupo ? await vm.groupMetadata(from) : ''
 const groupName = isGrupo ? groupMetadata.subject : ''
@@ -187,7 +187,7 @@ const hora = new Date().toLocaleTimeString('MX', options)
  vm.sendMessage(from,{ text : texto }, {quoted : info})
  }
  
- const enviarsms = (texto) => {
+const enviarsms = (texto) => {
 vm.sendMessage(from,{text : texto , contextInfo: {
       mentionedJid: [sender],
       "externalAdReply": {
@@ -246,7 +246,7 @@ const enviarmusica = (audios) => {
 vm.sendPoll = (jid, name = '', values = [], selectableCount = 1) => { return vm.sendMessage(jid, { poll: { name, values, selectableCount }}) }
  
  // CONSTANTES ISSS 
- const isImage = type == "imageMessage"
+const isImage = type == "imageMessage"
 const isVideo = type == "videoMessage"
 const isAudio = type == "audioMessage"
 const isSticker = type == "stickerMessage"
@@ -483,6 +483,13 @@ break
 
 /// [ DOWNLOAD ] ///
 
+case"yt":
+    if (deviceType === 'Android') {
+        vm.sendMessage(from, { text: "estos mensajes son para android."})
+    } else if (deviceType === 'IPhone') {
+        vm.sendMessage(from, { text: "estos mensajes son para ios."})
+    }
+break
 
 /*
     @media
