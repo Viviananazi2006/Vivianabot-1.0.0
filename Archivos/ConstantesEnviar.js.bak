@@ -1,6 +1,0 @@
-function enviartexto = (texto) => {
- vm.sendMessage(from,{ text : texto }, {quoted : info})
- }
-module.exports = {
-enviartexto
-}
