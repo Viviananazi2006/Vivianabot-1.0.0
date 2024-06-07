@@ -3,9 +3,10 @@
 while : 
 do
 echo "creditos a viviana 🧐iniciando automáticamente🧐"
+echo "Instalando paquetes necesarios."
+    npm install
     node index.js
     sleep 1
-
 done
 
 

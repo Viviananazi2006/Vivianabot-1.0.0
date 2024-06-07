@@ -1,19 +1,35 @@
 {
-  "name": "viviana-bot",
+  "name": "vivianabot-1.0.0",
   "version": "1.0.0",
-  "description": "dame creditos si quiera",
+  "description": "a whatsapp bot",
   "main": "index.js",
-    "scripts": {
-    "start": "node index.js",
+  "scripts": {
+    "start": "sh /start.sh"
+    "test": "test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viviananazi2006/Vivianabot-1.0.0.git"
+  },
+  "keywords": [
+    "bot",
+    "viviana",
+    "nazi"
+  ],
+  "author": "viviana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Viviananazi2006/Vivianabot-1.0.0/issues"
+  },
+  "homepage": "https://github.com/Viviananazi2006/Vivianabot-1.0.0#readme",
   "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.4",
+    "cfonts": "^3.2.0",
     "chalk": "^5.3.0",
     "cli-color": "^2.0.4",
     "fs": "^0.0.1-security",
     "moment-timezone": "^0.5.45",
     "node-cache": "^5.1.2",
     "readline": "^1.3.0"
-  },
-    "author": "",
-    "license": "ISC"
+  }
 }

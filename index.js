@@ -1,4 +1,4 @@
-const { default : makeWAvmet , DisconnectReason , useMultiFileAuthState , makeInMemoryStore , downloadContentFromMessage , prepareWAMessageMedia} = require('@whiskeysockets/baileys')
+const { default : makeWAvmet , DisconnectReason , useMultiFileAuthState , makeInMemoryStore , downloadContentFromMessage , prepareWAMessageMedia, Browsers } = require('@whiskeysockets/baileys')
 const { Boom } = require('@hapi/boom')
 const P = require('pino')
 const clc = require("cli-color")
@@ -15,14 +15,14 @@ const NodeCache = require('node-cache');
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 const msgRetryCounterCache = new NodeCache();
 const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-  })
+    input: process.stdin,
+    output: process.stdout,
+})
   
-  const banner = cfonts.render("Viviana | Bot", {
-  font: 'pallet',
-  align: 'center',
-  gradient: ["green","blue"]
+const banner = cfonts.render("Viviana | Bot", {
+    font: 'pallet',
+    align: 'center',
+    gradient: ["green","blue"]
 })
 const color = (text, color) => { return !color ? clc.bold(text) : clc.bold(text) }
 
@@ -59,7 +59,7 @@ const { state, saveCreds } = await useMultiFileAuthState('./qr-seccion')
       auth: state,
       logger: P({ level: 'silent' }),
       auth: state,
-      browser: ['FireFox (linux)', '1.0.0'],
+      browser: Browsers.ubuntu('Chrome'),
       patchMessageBeforeSending: (message) => {
          const requiresPatch = !!(
             message?.interactiveMessage
@@ -82,15 +82,23 @@ const { state, saveCreds } = await useMultiFileAuthState('./qr-seccion')
     });
      
  module.exports = { vm }
-     function limparNumero(entrada) {
+
+function limparNumero(entrada) {
     const numeros = entrada.replace(/\D/g, '');
-    const numeroLimpo = numeros.replace(/^(\d{2})(9)?(\d{8,9})$/, '$1$3');
+    let numeroLimpo;
+    if (numeros.startsWith('54')) {
+        numeroLimpo = numeros.replace(/^549?(\d{2})(15)?(\d{8})$/, '549$1$3');
+    } else if (numeros.startsWith('52')) {
+        numeroLimpo = numeros.replace(/^52(1)?(\d{10})$/, '521$2');
+    } else {
+        numeroLimpo = numeros;
+    }
     return numeroLimpo;
 }
 
     if (!vm.authState.creds.registered) {
         const phoneNumber = await question(`\n𝐕𝐈𝐕𝐈𝐀𝐍𝐀 | 𝐁𝐎𝐓\n𝐂𝐑𝐄𝐀𝐃𝐎 𝐏𝐎𝐑 𝐕𝐈𝐕𝐈𝐀𝐍𝐀 \n𝐃𝐈𝐆𝐈𝐓𝐄 𝐒𝐔 𝐍𝐔𝐌𝐄𝐑𝐎 𝐃𝐄 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 \n𝐄𝐉𝐄𝐌𝐏𝐋𝐎 : ${clc.bold("+52 999 999 999")}\n `);
-const numeroLimpo = limparNumero(phoneNumber);
+        const numeroLimpo = limparNumero(phoneNumber);
         const code = await vm.requestPairingCode(numeroLimpo);
         console.log(`𝐒𝐔 𝐂𝐎𝐃𝐈𝐆𝐎 𝐃𝐄 𝐂𝐎𝐍𝐄𝐗𝐈𝐎𝐍 𝐄𝐒 : \n\n ${clc.bold(code)}\n~>`);
         console.log(`𝐀𝐁𝐑𝐀 𝐒𝐔 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏, 𝐕𝐀𝐘𝐀  𝐀  ${clc.bold("Dispositivos Conectados > Conectar un nuevo Dispositivo > Conectar usando Número.")}`)
@@ -473,7 +481,12 @@ console.log(e)
 }
 break 
 
+/// [ DOWNLOAD ] ///
 
+
+/*
+    @media
+*/
 
 // COMANDOS SIN PREFIJO
 default:
