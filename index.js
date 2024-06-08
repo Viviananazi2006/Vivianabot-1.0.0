@@ -520,7 +520,8 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const videoId = await urlDecoded(url) ? url : 'error'
+        const result = await urlDecoded(url)
+        const videoId = await result.id ? url : 'error'
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + videoId, { lang: 'id' });
         const format = ytdl.chooseFormat(videoInfo.formats, { format: 132, filter: 'videoandaudio' })
         const result = {
@@ -564,13 +565,30 @@ case 'PLAY': {
     }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const result = await search(q)
-            await downloadVideo(result.url)
-            await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+            const url = await urlDecoded(q)
+            console.log(url)
+            if (url.status == 'true') {
+                const result = await searchUrl(q)
+                console.log(result[0])
+                await downloadVideo(result[0].url)
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: `send video\nTitle:${result.title}\n${result.contentLength}`})
+            } else {
+                const result = await search(q)
+                console.log('1' + result[0])
+                await downloadVideo(result[0].id)
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+            }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            const result = await search(q)
-            await downloadAudio(result[0].url)
-            await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            const url = await urlDecoded(q)
+            if (url.status == 'true') {
+                const result = await searchUrl(q)
+                await downloadAudio(result[0].url)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            } else {
+                const result = await search(q)
+                await downloadAudio(result[0].id)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
             
         }
