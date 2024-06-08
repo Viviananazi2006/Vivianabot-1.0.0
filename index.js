@@ -557,11 +557,11 @@ case 'PLAY': {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
-                await downloadAudio(result[0].url)
+                await downloadAudio(result[0].id)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
                 const result = await search(q)
-                await downloadAudio(result[0].url)
+                await downloadAudio(result[0].id)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
