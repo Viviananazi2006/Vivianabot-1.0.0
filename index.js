@@ -522,7 +522,7 @@ case 'PLAY': {
     async function searchUrl(url) {
         const videoId = await urlDecoded(url) ? url : 'error'
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + videoId, { lang: 'id' });
-        const format = ytdl.chooseFormat(videoInfo.formats, { format: quality, filter: 'videoandaudio' })
+        const format = ytdl.chooseFormat(videoInfo.formats, { format: 132, filter: 'videoandaudio' })
         const result = {
             type: 'video',
             title: videoInfo.videoDetails.title,
@@ -569,11 +569,11 @@ case 'PLAY': {
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
                 console.log(result)
-                await downloadVideo(result[0].id)
+                await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
-                await downloadVideo(result[0].id)
+                await downloadVideo(result.id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
@@ -581,7 +581,7 @@ case 'PLAY': {
             console.log(url)
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
-                await downloadAudio(result[0].id)
+                await downloadAudio(result.url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
                 const result = await search(q)
