@@ -520,12 +520,12 @@ case 'PLAY': {
 
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const _text = await urlDetect(args.join(' '))
+            const _text = await args.join(' ')
             const result = await search(_text)
             const stream = await ytdl(result.url, { filter: 'audioandvideo', quality: 'highestvideo' });
             await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            const _text = await urlDetect(args.join(' '))
+            const _text = await args.join(' ')
             const result = await search(_text)
             const stream = await ytdl(youtubeURL, { filter: 'audioonly', quality: 'highestaudio' });
             await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
