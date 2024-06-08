@@ -567,7 +567,7 @@ case 'PLAY': {
             const url = await urlDecoded(q)
             console.log(url)
             if (url.status) {
-                const result = await searchUrl(url.id)
+                const result = await searchUrl(q)
                 console.log('1-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
@@ -580,7 +580,7 @@ case 'PLAY': {
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status) {
-                const result = await searchUrl(url.id)
+                const result = await searchUrl(q)
                 await downloadAudio(result.url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
