@@ -494,7 +494,7 @@ case 'Play':
 case 'YTMP4':
 case 'YTMP3':
 case 'PLAY': {
-    if (q) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
+    if (!q) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
     async function search(param) {
         const search = await ytSearch(param);
         
