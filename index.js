@@ -556,22 +556,22 @@ case 'PLAY': {
             const url = await uri(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
-                await downloadVideo(result.url)
+                await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
-                await downloadVideo(result.url)
+                await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await uri(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
-                await downloadAudio(result.url)
+                await downloadAudio(result[0].url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
                 const result = await search(q)
-                await downloadAudio(result.url)
+                await downloadAudio(result[0].url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
