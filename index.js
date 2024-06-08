@@ -566,7 +566,7 @@ case 'PLAY': {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await searchUrl(url.id)
+                const result = await searchUrl(q)
                 await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
@@ -577,7 +577,7 @@ case 'PLAY': {
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await searchUrl(url.id)
+                const result = await searchUrl(q)
                 await downloadAudio(result[0].url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
