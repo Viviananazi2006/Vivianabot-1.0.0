@@ -527,7 +527,7 @@ case 'PLAY': {
             for await (const chunk of stream){
                 buffer = Buffer.concat([buffer, chunk]);
             }
-            await vm.sendMessage(from, { audio: { url: buffer }, caption: 'send audio'})
+            await vm.sendMessage(from, { audio: { url: buffer }, mimetype: 'audio/mp4', caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
                 
         }
