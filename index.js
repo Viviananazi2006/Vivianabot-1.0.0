@@ -556,11 +556,11 @@ case 'PLAY': {
             const url = await url(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
-                await downloadAudio(result.url)
+                await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
-                await downloadAudio(result.url)
+                await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
@@ -631,19 +631,3 @@ console.log('Error : %s', color(e, 'yellow'))
 }
 // run in main file
 connectToWhatsApp()
-
-
-
-
-
-
-
-
-
-downloadVideo(videoUrl, videoOutput)
-    .then(message => console.log(message))
-    .catch(err => console.error('Error al descargar el video:', err));
-
-downloadAudio(videoUrl, audioOutput)
-    .then(message => console.log(message))
-    .catch(err => console.error('Error al descargar el audio:', err));
