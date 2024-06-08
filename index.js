@@ -514,18 +514,6 @@ case 'PLAY': {
         return result
     }
     
-    async function sendAudio(url) {
-        const audioStream = ytdl(url, { filter: 'audioonly', quality: 'highestaudio' });
-        const passThrough = new PassThrough();
-        let buffer = Buffer.from([]);
-    
-        audioStream.pipe(passThrough);
-    
-        passThrough.on('data', (chunk) => {
-            buffer = Buffer.concat([audioBuffer, chunk]);
-        })
-        return buffer
-    }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
@@ -534,7 +522,11 @@ case 'PLAY': {
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
             const stream = await sendAudio(result.id)
-            await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
+            let buffer = Buffer.from([]);
+            for await (const chunk of stream){
+                buffer = Buffer.concat([buffer, chunk]);
+            }
+            await vm.sendMessage(from, { audio: { url: buffer }, caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
                 
         }
