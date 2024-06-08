@@ -521,6 +521,7 @@ case 'PLAY': {
             await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
+            console.log(result[0].url)
             const stream = await ytdl(result[0].url, { filter: 'audioonly', quality: 'highestaudio' });
             let buffer = Buffer.from([]);
             for await (const chunk of stream){
