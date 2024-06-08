@@ -523,12 +523,7 @@ case 'PLAY': {
         return new Promise((resolve, reject) => {
             ytdl(url, { quality: 'highestvideo' })
                 .pipe(fs.createWriteStream(outputPath))
-                .on('finish', () => {
-                    resolve(`Video descargado a ${outputPath}`);
-                    setTimeout(() => {
-                        fs.unlinkSync(outputPath);
-                    }, 30000);
-                })
+                .on('finish', () => { resolve(`Video descargado a ${outputPath}`) })
                 .on('error', (err) => reject(err));
         });
     }
@@ -537,12 +532,7 @@ case 'PLAY': {
         return new Promise((resolve, reject) => {
             ytdl(url, { quality: 'highestaudio' })
                 .pipe(fs.createWriteStream(outputPath))
-                .on('finish', () => {
-                    resolve(`Audio descargado a ${outputPath}`);
-                    setTimeout(() => {
-                        fs.unlinkSync(outputPath);;
-                    }, 30000); // Eliminar después de 30 segundos
-                })
+                .on('finish', () => { resolve(`Audio descargado a ${outputPath}`) })
                 .on('error', (err) => reject(err));
         });
     }
