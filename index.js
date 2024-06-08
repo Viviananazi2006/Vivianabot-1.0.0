@@ -520,14 +520,14 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/
+        const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11}).*/;
         const splitUrl = regex.test(url) ? regex.exec(url)[1] : url
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + splitUrl, { lang: 'id' });
         const format = ytdl.chooseFormat(videoInfo.formats, { format: 132, filter: 'videoandaudio' })
         const result = {
             type: 'video',
             title: videoInfo.videoDetails.title,
-            url: format.url,
+            url: 'https://www.youtube.com/watch?v=' + url,
             id: url,
             Thumbnail: videoInfo.videoDetails.thumbnails.slice(-1)[0],
             author: videoInfo.videoDetails.ownerChannelName,
@@ -538,7 +538,6 @@ case 'PLAY': {
             quality: format.qualityLabel,
         }
         return result;
-    }
 
 
     function downloadVideo(url) {
@@ -570,7 +569,7 @@ case 'PLAY': {
             console.log(url)
             if (url.status) {
                 const result = await searchUrl(q)
-                console.log('1-- ' + result + '\n\n' + url.id)
+                console.log('1-- ' + result.id + '\n\n' + url.id)
                 await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
