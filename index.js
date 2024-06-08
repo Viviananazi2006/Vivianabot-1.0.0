@@ -567,7 +567,7 @@ case 'PLAY': {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
             console.log(url.status)
-            if (url.status == 'true') {
+            if (url.status === 'true') {
                 const result = await searchUrl(q)
                 console.log('2' + result[0])
                 await downloadVideo(result[0].id)
