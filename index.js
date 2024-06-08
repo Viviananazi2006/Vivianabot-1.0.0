@@ -569,11 +569,11 @@ case 'PLAY': {
                 const result = await searchUrl(q)
                 await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: `send video\nTitle:${result.title}\n${result.contentLength}`})
-            } else {
+            } /* else {
                 const result = await search(q)
                 await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
-            }
+            } */
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
