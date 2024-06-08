@@ -520,22 +520,18 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const info = await ytdl.getInfo(url);
+        const video = await ytSearch({ videoId: url });
         const result = {
             type: 'video',
-            title: info.videoDetails.title,
-            url: `https://www.youtube.com/watch?v=${info.videoDetails.videoId}`,
-            id: info.videoDetails.videoId,
-            thumbnail: info.videoDetails.thumbnails[0].url,
-            author: {
-                name: info.videoDetails.author.name,
-                url: `https://www.youtube.com/channel/${info.videoDetails.author.id}`
-            },
-            description: info.videoDetails.description,
-            views: info.videoDetails.viewCount,
-            duration: info.videoDetails.lengthSeconds,
-            date: info.videoDetails.uploadDate
-            
+            title: video.title,
+            url: `https://www.youtube.com/watch?v=${video.videoId}`,
+            id: video.videoId,
+            thumbnail: video.image,
+            author: { name: video.author.name, url: video.author.url },
+            description: video.description,
+            views: video.views,
+            duration: video.duration,
+            date: video.ago
         };
         return result;
     }
