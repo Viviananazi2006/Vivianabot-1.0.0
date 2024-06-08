@@ -517,11 +517,11 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
-            let stream = await ytdl(result[0].id, { filter: 'audioandvideo', quality: 'highestvideo' });
+            let stream = await ytdl(result[0].url, { filter: 'audioandvideo', quality: 'highestvideo' });
             await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
-            const stream = await sendAudio(result.id)
+            const stream = await ytdl(result[0].url, { filter: 'audioonly', quality: 'highestaudio' });
             let buffer = Buffer.from([]);
             for await (const chunk of stream){
                 buffer = Buffer.concat([buffer, chunk]);
