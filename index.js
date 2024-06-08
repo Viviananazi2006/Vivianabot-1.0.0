@@ -516,12 +516,12 @@ case 'PLAY': {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
             const stream = await ytdl(result[0].url, { filter: 'audioandvideo', quality: 'highestvideo' });
-            await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
+            await vm.sendMessage(from, { video: stream, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
-            console.log(result)
+            console.log(result[0])
             const stream = await ytdl(result[0].url, { filter: 'audioonly', quality: 'highestaudio' });
-            await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
+            await vm.sendMessage(from, { audio: stream, caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
                 
         }
