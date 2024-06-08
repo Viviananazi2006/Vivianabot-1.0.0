@@ -3,6 +3,8 @@ const { Boom } = require('@hapi/boom')
 const P = require('pino')
 const clc = require("cli-color")
 const cfonts = require('cfonts')
+const ytSearch = require('yt-search');
+const ytdl = require('ytdl-core');
 const chalk = import('chalk')
 const fs = require('fs')
 
@@ -483,13 +485,64 @@ break
 
 /// [ DOWNLOAD ] ///
 
-case"yt":
-    if (deviceType === 'Android') {
-        vm.sendMessage(from, { text: "estos mensajes son para android."})
-    } else if (deviceType === 'IPhone') {
-        vm.sendMessage(from, { text: "estos mensajes son para ios."})
+case 'ytmp4':
+case 'ytmp3':
+case 'play':
+case 'Ytmp4':
+case 'Ytmp3':
+case 'Play':
+case 'YTMP4':
+case 'YTMP3':
+case 'PLAY': {
+    if (args.join(' ')) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
+    async function search(param) {
+        const search = await ytSearch(param);
+        
+        const result = search.videos.map(item => ({
+            type: 'video',
+            title: item.title,
+            url: `https://www.youtube.com/watch?v=${item.videoId}`,
+            Thumbnail: item.image,
+            author: { name: item.author.name, url: item.author.url },
+            description: item.description,
+            views: item.views,
+            duration: item.duration,
+            date: item.ago
+        }));
+        return result
     }
-break
+    
+    function urlDetect(url) {
+        const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        return regex.test(url);
+    }
+
+
+    if (deviceType === 'Android') {
+        if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+            const _text = await urlDetect(args.join(' '))
+            const result = await search(_text)
+            const stream = await ytdl(result.url, { filter: 'audioandvideo', quality: 'highestvideo' });
+            await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
+        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
+            const _text = await urlDetect(args.join(' '))
+            const result = await search(_text)
+            const stream = await ytdl(youtubeURL, { filter: 'audioonly', quality: 'highestaudio' });
+            await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
+        } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+                
+        }
+    } else if (!deviceType === 'Android') {
+        if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+            
+        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
+            
+        } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+                
+        }
+    }
+    break
+}
 
 /*
     @media
@@ -511,7 +564,7 @@ default:
  
  
  
- } catch (e) {
+} catch (e) {
  e = String(e)
 if (!e.includes("this.isZero") && !e.includes("Could not find MIME for Buffer <null>") && !e.includes("Cannot read property 'conversation' of null") && !e.includes("Cannot read property 'contextInfo' of undefined") && !e.includes("Cannot set property 'mtype' of undefined") && !e.includes("jid is not defined")) {
 console.log('Error : %s', color(e, 'yellow'))
