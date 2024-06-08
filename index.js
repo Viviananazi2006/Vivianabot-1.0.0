@@ -518,6 +518,28 @@ case 'PLAY': {
         }));
         return result
     }
+
+    async function searchUrl(url) {
+        const info = await ytdl.getInfo(url);
+        const result = {
+            type: 'video',
+            title: info.videoDetails.title,
+            url: `https://www.youtube.com/watch?v=${info.videoDetails.videoId}`,
+            id: info.videoDetails.videoId,
+            thumbnail: info.videoDetails.thumbnails[0].url,
+            author: {
+                name: info.videoDetails.author.name,
+                url: `https://www.youtube.com/channel/${info.videoDetails.author.id}`
+            },
+            description: info.videoDetails.description,
+            views: info.videoDetails.viewCount,
+            duration: info.videoDetails.lengthSeconds,
+            date: info.videoDetails.uploadDate
+            
+        };
+        return result;
+    }
+
     function downloadVideo(url) {
         const outputPath = path.join(__dirname, 'tmp', 'ytmp4.mp4');
         return new Promise((resolve, reject) => {
@@ -546,7 +568,7 @@ case 'PLAY': {
             const url = await urlDecoded(q)
             console.log(url)
             if (url.status == 'true') {
-                const result = await search(url.id)
+                const result = await searchUrl(url.id)
                 await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
@@ -558,7 +580,7 @@ case 'PLAY': {
             const url = await urlDecoded(q)
             console.log(url)
             if (url.status == 'true') {
-                const result = await search(url.id)
+                const result = await searchUrl(url.id)
                 await downloadAudio(result[0].id)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
