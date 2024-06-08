@@ -520,8 +520,8 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11}).*/;
-        const splitUrl = regex.test(url) ? regex.exec(url)[1] : url.match(regex)
+        const regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/
+        const splitUrl = regex.test(url) ? regex.exec(url)[1] : url
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + splitUrl, { lang: 'id' });
         const format = ytdl.chooseFormat(videoInfo.formats, { format: 132, filter: 'videoandaudio' })
         const result = {
