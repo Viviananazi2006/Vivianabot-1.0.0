@@ -577,6 +577,69 @@ case 'PLAY': {
                 const result = await search(q)
                 console.log('2-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result[0].url)
+                // await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+                let messageaa = await prepareWAMessageMedia({ video: {url: "./tmp/ytmp4.mp4"} }, { upload: vm.waUploadToServer });
+await vm.relayMessage(from, {
+    botInvokeMessage: {
+            message: {
+                messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {},
+                },
+                interactiveMessage: {
+                    header: {
+                        title: 'Título principal aqui',
+                        subtitle: 'Sub-título aqui',
+                        hasMediaAttachment: true,
+                        imageMessage: messageaa.imageMessage
+                    },
+                    headerType: 'VIDEO',
+                    body: { text: "Seu texto aqui", }, footer: {
+text: `Nome do rodapé aqui`},
+                    nativeFlowMessage: {
+                        buttons: [
+                            {
+"name": "cta_url",
+                  "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}"
+},
+{
+"name": "cta_url",
+                  "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}"
+,},                                     
+                        ],
+                        messageParamsJson: "",
+                    },
+                },
+            },
+        },
+    contextInfo: {externalAdReply : {title : ``, renderLargerThumbnail:false, showAdAttribution: false, body: ``, mediaUrl: `` , mediaType: 2, thumbnail: "" }}}, {quoted: info}
+).then((r) => console.log(r));
+            }
+        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
+            const url = await urlDecoded(q)
+            if (url.status) {
+                const result = await searchUrl(q)
+                await downloadAudio(result.url)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            } else {
+                const result = await search(q)
+                await downloadAudio(result[0].url)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            }
+        } else if (["play", "Play", "PLAY"].includes(comando)) {
+            
+        }
+    } else if (!deviceType === 'Android') {
+        if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+            const url = await urlDecoded(q)
+            console.log(url)
+            if (url.status) {
+                const result = await searchUrl(q)
+                console.log('1-- ' + result + '\n\n' + url.id)
+                await downloadVideo(result.url)
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+            } else {
+                const result = await search(q)
+                console.log('2-- ' + result + '\n\n' + url.id)
+                await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
@@ -589,17 +652,9 @@ case 'PLAY': {
                 const result = await search(q)
                 await downloadAudio(result[0].url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
-            }//
+            }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
             
-        }
-    } else if (!deviceType === 'Android') {
-        if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            
-        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            
-        } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-                
         }
     }
     break
