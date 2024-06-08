@@ -566,17 +566,17 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
-            if (url.status) {
+            // if (url.status) {
                 const result = await searchUrl(q)
-                console.log('2' + result[0])
+                console.log('2 ' + result[0])
                 await downloadVideo(result.id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: `send video\nTitle:${result.title}\n${result.contentLength}`})
-            } else {
+            /* } else {
                 const result = await search(q)
-                console.log('1' + result[0])
+                console.log('1 ' + result[0])
                 await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
-            }
+            } */
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
