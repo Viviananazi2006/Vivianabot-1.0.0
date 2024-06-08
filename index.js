@@ -1,6 +1,7 @@
 const { default : makeWAvmet , DisconnectReason , useMultiFileAuthState , makeInMemoryStore , downloadContentFromMessage , prepareWAMessageMedia, Browsers } = require('@whiskeysockets/baileys')
 const { Boom } = require('@hapi/boom')
 const P = require('pino')
+const path = require('path');
 const clc = require("cli-color")
 const cfonts = require('cfonts')
 const ytSearch = require('yt-search');
@@ -186,7 +187,7 @@ const hora = new Date().toLocaleTimeString('MX', options)
  
  // CONSTANTES NUEVAS
  
- const enviartexto = (texto) => {
+const enviartexto = (texto) => {
  vm.sendMessage(from,{ text : texto }, {quoted : info})
  }
  
@@ -203,21 +204,21 @@ vm.sendMessage(from,{text : texto , contextInfo: {
     }})
     }
  
- const enviarimagen = (imagen) => {
+const enviarimagen = (imagen) => {
  vm.sendMessage(from,{ image : imagen }, {quoted : info})
  }
  
- const enviarimagencap = (imagen,caption) => {
+const enviarimagencap = (imagen,caption) => {
  vm.sendMessage(from,{ image : imagen ,caption : caption}, {quoted : info})
  }
  
 const enviarvideos = (videos) => {
  vm.sendMessage(from,{ video : video ,mimetype: 'video/mp4' ,ppt: true, caption : caption}, {quoted : info})
- }
+}
  
- const enviarvideoscap = (videos,caption) => {
+const enviarvideoscap = (videos,caption) => {
  vm.sendMessage(from,{ video : videos ,caption : caption}, {quoted : info})
- }
+}
  
 const enviarmusica = (audios) => {
  vm.sendMessage(from,{ audio : musica ,mimetype: 'audio/mp4' ,ppt: true,}, {quoted : info})
@@ -344,7 +345,11 @@ color('\n    √ • ❏   ⃟ɴᴜᴍᴇʀᴏ ','lime'),color(` : ${sender.spli
 color('\n    √ • ❏   ⃟ʜᴏʀᴀ ','lime'),color(`: ${hora}`,'aqua'),
 color('\n  ╰ ── ✦ き⃟⃟「','lime'),color(' 𝐏𝐑𝐈𝐕𝐀𝐓𝐄 ╰‿╯ ','cyan'),color('」き⃟⃟  ✦ ──╯','lime')
 )
-}      
+}    
+
+if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
+    fs.mkdirSync(path.join(__dirname, 'tmp'));
+}
  
 switch(comando){
 
@@ -496,8 +501,8 @@ case 'YTMP4':
 case 'YTMP3':
 case 'PLAY': {
     if (!q) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
-    async function search(param) {
-        const search = await ytSearch(param);
+    async function search(query) {
+        const search = await ytSearch(query);
         
         const result = search.videos.map(item => ({
             type: 'video',
@@ -513,22 +518,63 @@ case 'PLAY': {
         }));
         return result
     }
-    
+    function downloadVideo(url) {
+        const outputPath = path.join(__dirname, 'tmp', 'ytmp4.mp4');
+        return new Promise((resolve, reject) => {
+            ytdl(url, { quality: 'highestvideo' })
+                .pipe(fs.createWriteStream(outputPath))
+                .on('finish', () => {
+                    resolve(`Video descargado a ${outputPath}`);
+                    setTimeout(() => {
+                        fs.unlinkSync(outputPath);
+                    }, 30000);
+                })
+                .on('error', (err) => reject(err));
+        });
+    }
+    function downloadAudio(url) {
+        const outputPath = path.join(__dirname, 'tmp', 'ytmp3.mp3');
+        return new Promise((resolve, reject) => {
+            ytdl(url, { quality: 'highestaudio' })
+                .pipe(fs.createWriteStream(outputPath))
+                .on('finish', () => {
+                    resolve(`Audio descargado a ${outputPath}`);
+                    setTimeout(() => {
+                        fs.unlinkSync(outputPath);;
+                    }, 30000); // Eliminar después de 30 segundos
+                })
+                .on('error', (err) => reject(err));
+        });
+    }
+    function url(url) {
+        const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = url.match(regex);
+        return match ? { status: true, id: match[1] } : { status: false };
+    }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const result = await search(q)
-            let stream = await ytdl(result[0].url, { filter: 'audioandvideo', quality: 'highestvideo' });
-            await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
-        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            const result = await search(q)
-            console.log(result[0].url)
-            const stream = await ytdl(result[0].url, { filter: 'audioonly', quality: 'highestaudio' });
-            let buffer = Buffer.from([]);
-            for await (const chunk of stream){
-                buffer = Buffer.concat([buffer, chunk]);
+            const url = await url(q)
+            if (url.status == 'true') {
+                const result = await search(url.id)
+                await downloadAudio(result.url)
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+            } else {
+                const result = await search(q)
+                await downloadAudio(result.url)
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
-            await vm.sendMessage(from, { audio: { url: buffer }, mimetype: 'audio/mp4', caption: 'send audio'})
-        } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
+        } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
+            const url = await url(q)
+            if (url.status == 'true') {
+                const result = await search(url.id)
+                await downloadAudio(result.url)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            } else {
+                const result = await search(q)
+                await downloadAudio(result.url)
+                await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
+            }
+        } else if (["play", "Play", "PLAY"].includes(comando)) {
                 
         }
     } else if (!deviceType === 'Android') {
@@ -586,3 +632,18 @@ console.log('Error : %s', color(e, 'yellow'))
 // run in main file
 connectToWhatsApp()
 
+
+
+
+
+
+
+
+
+downloadVideo(videoUrl, videoOutput)
+    .then(message => console.log(message))
+    .catch(err => console.error('Error al descargar el video:', err));
+
+downloadAudio(videoUrl, audioOutput)
+    .then(message => console.log(message))
+    .catch(err => console.error('Error al descargar el audio:', err));
