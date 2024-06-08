@@ -578,20 +578,19 @@ case 'PLAY': {
                 console.log('2-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result[0].url)
                 // await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
-                let messageaa = await prepareWAMessageMedia({ video: {url: "./tmp/ytmp4.mp4"} }, { upload: vm.waUploadToServer });
-await vm.relayMessage(from, {
-    botInvokeMessage: {
-            message: {
-                messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {},
-                },
-                interactiveMessage: {
-                    header: {
-                        title: 'Título principal aqui',
-                        subtitle: 'Sub-título aqui',
-                        hasMediaAttachment: true,
-                        imageMessage: messageaa.imageMessage
+                let messageaa = await prepareWAMessageMedia({ video: {url: './tmp/ytmp4.mp4' } }, { upload: vm.waUploadToServer });
+                await vm.relayMessage(from, {
+                    botInvokeMessage: {
+                        message: {
+                            messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
+                            interactiveMessage: {
+                                header: {
+                                    title: 'Título principal aqui',
+                                    subtitle: 'Sub-título aqui',
+                                    hasMediaAttachment: true,
+                                    videoMessage: messageaa.videoMessage
                     },
-                    headerType: 'VIDEO',
+                    headerType: 'IMAGE',
                     body: { text: "Seu texto aqui", }, footer: {
 text: `Nome do rodapé aqui`},
                     nativeFlowMessage: {
