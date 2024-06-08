@@ -568,7 +568,7 @@ case 'PLAY': {
             if (url.status == 'true') {
                 const result = await searchUrl(q)
                 await downloadVideo(result[0].url)
-                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: `send video\nTitle:${result.title}\n${result.contentLength}`})
             } else {
                 const result = await search(q)
                 await downloadVideo(result[0].id)
@@ -586,7 +586,7 @@ case 'PLAY': {
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
-                
+            
         }
     } else if (!deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
