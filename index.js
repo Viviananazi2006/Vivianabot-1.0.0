@@ -526,7 +526,7 @@ case 'PLAY': {
             type: 'video',
             title: videoInfo.videoDetails.title,
             url: format.url,
-            id: videoId,
+            id: url,
             Thumbnail: videoInfo.videoDetails.thumbnails.slice(-1)[0],
             author: videoInfo.videoDetails.ownerChannelName,
             description:videoInfo.videoDetails.description,
