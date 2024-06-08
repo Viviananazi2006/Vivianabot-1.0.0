@@ -565,12 +565,11 @@ case 'PLAY': {
     }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const url = urlDecoded(q)
-            console.log(url.status)
-            if (url.status === 'true') {
+            const url = await urlDecoded(q)
+            if (url.status) {
                 const result = await searchUrl(q)
                 console.log('2' + result[0])
-                await downloadVideo(result[0].id)
+                await downloadVideo(result.id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: `send video\nTitle:${result.title}\n${result.contentLength}`})
             } else {
                 const result = await search(q)
