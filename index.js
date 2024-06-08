@@ -570,47 +570,66 @@ case 'PLAY': {
             console.log(url)
             if (url.status) {
                 const result = await searchUrl(q)
-                console.log('1-- ' + result + '\n\n' + url.id)
+                // TEST BOT console.log('1-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result.url)
-                await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
-            } else {
-                const result = await search(q)
-                console.log('2-- ' + result + '\n\n' + url.id)
-                await downloadVideo(result[0].url)
                 // await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
-                let messageaa = await prepareWAMessageMedia({ video: {url: './tmp/ytmp4.mp4' } }, { upload: vm.waUploadToServer });
+                let media = await prepareWAMessageMedia({ video: {url: './tmp/ytmp4.mp4' } }, { upload: vm.waUploadToServer });
                 await vm.relayMessage(from, {
                     botInvokeMessage: {
                         message: {
                             messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
                             interactiveMessage: {
                                 header: {
-                                    title: 'Título principal aqui',
-                                    subtitle: 'Sub-título aqui',
+                                    title: 'Viviana Bot Vip',
                                     hasMediaAttachment: true,
-                                    videoMessage: messageaa.videoMessage
+                                    videoMessage: media.videoMessage
+                                },
+                                headerType: 'VIDEO',
+                                body: { text: `info`, }, footer: { text: `footer` },
+                                nativeFlowMessage: {
+                                    buttons: [
+                                        { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
+                                        { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
+                                    ],
+                                    messageParamsJson: "",
+                                    
+                                },
+                            },
+                            
+                        },
+                        
                     },
-                    headerType: 'IMAGE',
-                    body: { text: "Seu texto aqui", }, footer: {
-text: `Nome do rodapé aqui`},
-                    nativeFlowMessage: {
-                        buttons: [
-                            {
-"name": "cta_url",
-                  "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}"
-},
-{
-"name": "cta_url",
-                  "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}"
-,},                                     
-                        ],
-                        messageParamsJson: "",
+                    contextInfo: {externalAdReply : {title : ``, renderLargerThumbnail:false, showAdAttribution: false, body: ``, mediaUrl: `` , mediaType: 2, thumbnail: "" }}
+                }, {quoted: info}).then((r) => console.log(r));
+            } else {
+                const result = await search(q)
+                // TEST BOT 2console.log('2-- ' + result + '\n\n' + url.id)
+                await downloadVideo(result[0].url)
+                // await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
+                let media = await prepareWAMessageMedia({ video: {url: './tmp/ytmp4.mp4' } }, { upload: vm.waUploadToServer });
+                await vm.relayMessage(from, {
+                    botInvokeMessage: {
+                        message: {
+                            messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
+                            interactiveMessage: {
+                                header: { title: 'Viviana Bot Vip', hasMediaAttachment: true, videoMessage: media.videoMessage },
+                                headerType: 'VIDEO',
+                                body: { text: `info`, }, footer: { text: `footer` },
+                                nativeFlowMessage: {
+                                    buttons: [
+                                        { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
+                                        { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
+                                    ],
+                                    messageParamsJson: "",
+                                    
+                                },
+                            },
+                            
+                        },
+                        
                     },
-                },
-            },
-        },
-    contextInfo: {externalAdReply : {title : ``, renderLargerThumbnail:false, showAdAttribution: false, body: ``, mediaUrl: `` , mediaType: 2, thumbnail: "" }}}, {quoted: info}
-).then((r) => console.log(r));
+                    contextInfo: {externalAdReply : {title : ``, renderLargerThumbnail:false, showAdAttribution: false, body: ``, mediaUrl: `` , mediaType: 2, thumbnail: "" }}
+                }, {quoted: info}).then((r) => console.log(r));
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
@@ -624,7 +643,23 @@ text: `Nome do rodapé aqui`},
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
-            
+            const result = await search(q)
+            await downloadVideo(result[0].url)
+            let media = await prepareWAMessageMedia({ image: {url: result.Thumbnail } }, { upload: vm.waUploadToServer });
+            await vm.relayMessage(m.from, {
+                interactiveMessage: {
+                    header: { title: 'Viviana Bot Vip', hasMediaAttachment: true, imageMessage: media.imageMessage },
+                    headerType: 'IMAGE',
+                    body: { text: `aqui va la info del video`, footer: { text: `el footer`} },
+                    nativeFlowMessage: {
+                        buttons: [
+                            { name: "quick_reply", buttonParamsJson: JSON.stringify({ display_text: "Download Mp4", id: `.ytmp4 ${result.url}` })},
+                            { name: "quick_reply", buttonParamsJson: JSON.stringify({ display_text: "Download Mp3", id: `.ytmp3 ${result.url}` })} 
+                        ],
+                        messageParamsJson: "",
+                    },
+                },
+            }, {})
         }
     } else if (!deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
