@@ -565,11 +565,11 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
-            await downloadVideo(result[0].id)
+            await downloadVideo(result[0].url)
             await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
-            await downloadAudio(result[0].id)
+            await downloadAudio(result[0].url)
             await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
         } else if (["play", "Play", "PLAY"].includes(comando)) {
             
