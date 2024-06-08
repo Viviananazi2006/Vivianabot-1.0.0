@@ -503,6 +503,7 @@ case 'PLAY': {
             type: 'video',
             title: item.title,
             url: `https://www.youtube.com/watch?v=${item.videoId}`,
+            id: item.videoId,
             Thumbnail: item.image,
             author: { name: item.author.name, url: item.author.url },
             description: item.description,
@@ -528,11 +529,11 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
-            const stream = await ytdl(result[0].url, { filter: 'audioandvideo', quality: 'highestvideo' });
+            const stream = await ytdl(result[0].id, { filter: 'audioandvideo', quality: 'highestvideo' });
             await vm.sendMessage(from, { video: stream, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
-            const stream = await sendAudio(result.url)
+            const stream = await sendAudio(result.if)
             await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
                 
