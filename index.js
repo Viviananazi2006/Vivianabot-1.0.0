@@ -527,7 +527,7 @@ case 'PLAY': {
         const result = {
             type: 'video',
             title: videoInfo.videoDetails.title,
-            url: 'https://www.youtube.com/watch?v=' + url,
+            url: 'https://www.youtube.com/watch?v=' + splitUrl,
             id: url,
             Thumbnail: videoInfo.videoDetails.thumbnails.slice(-1)[0],
             author: videoInfo.videoDetails.ownerChannelName,
