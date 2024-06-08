@@ -536,6 +536,7 @@ case 'PLAY': {
             date: videoInfo.videoDetails.publishDate,
             quality: format.qualityLabel,
         }
+        console.log(result)
         return result;
     }
 
@@ -569,11 +570,11 @@ case 'PLAY': {
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
                 console.log(result)
-                await downloadVideo(result.url)
+                await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
-                await downloadVideo(result.id)
+                await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
@@ -581,7 +582,7 @@ case 'PLAY': {
             console.log(url)
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
-                await downloadAudio(result.url)
+                await downloadAudio(result[0].url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
                 const result = await search(q)
