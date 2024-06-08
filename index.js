@@ -536,7 +536,6 @@ case 'PLAY': {
             date: videoInfo.videoDetails.publishDate,
             quality: format.qualityLabel,
         }
-        console.log(result)
         return result;
     }
 
@@ -566,10 +565,8 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
-            console.log(url)
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
-                console.log(result)
                 await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
@@ -579,7 +576,6 @@ case 'PLAY': {
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
-            console.log(url)
             if (url.status == 'true') {
                 const result = await searchUrl(url.id)
                 await downloadAudio(result[0].url)
