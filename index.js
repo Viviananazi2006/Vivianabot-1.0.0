@@ -569,7 +569,7 @@ case 'PLAY': {
             if (url.status) {
                 const result = await searchUrl(url.id)
                 console.log('1-- ' + result + '\n\n' + url.id)
-                await downloadVideo(result[0].url)
+                await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
@@ -581,7 +581,7 @@ case 'PLAY': {
             const url = await urlDecoded(q)
             if (url.status) {
                 const result = await searchUrl(url.id)
-                await downloadAudio(result[0].url)
+                await downloadAudio(result.url)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
                 const result = await search(q)
