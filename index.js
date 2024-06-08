@@ -545,18 +545,18 @@ case 'PLAY': {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await search(url.id)
-                await downloadVideo(result[0].url)
+                const result = await search(q)
+                await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
-                await downloadVideo(result[0].url)
+                await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await search(url.id)
+                const result = await search(q)
                 await downloadAudio(result[0].id)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
