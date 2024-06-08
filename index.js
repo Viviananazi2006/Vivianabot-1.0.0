@@ -521,7 +521,7 @@ case 'PLAY': {
     function downloadVideo(url) {
         const outputPath = path.join(__dirname, 'tmp', 'ytmp4.mp4');
         return new Promise((resolve, reject) => {
-            ytdl(url, { quality: 'highestvideo' })
+            ytdl(url, { filter: 'audioandvideo', quality: 'highestvideo' })
                 .pipe(fs.createWriteStream(outputPath))
                 .on('finish', () => { resolve(`Video descargado a ${outputPath}`) })
                 .on('error', (err) => reject(err));
@@ -530,7 +530,7 @@ case 'PLAY': {
     function downloadAudio(url) {
         const outputPath = path.join(__dirname, 'tmp', 'ytmp3.mp3');
         return new Promise((resolve, reject) => {
-            ytdl(url, { quality: 'highestaudio' })
+            ytdl(youtubeURL, { filter: 'audioonly', quality: 'highestaudio' })
                 .pipe(fs.createWriteStream(outputPath))
                 .on('finish', () => { resolve(`Audio descargado a ${outputPath}`) })
                 .on('error', (err) => reject(err));
@@ -545,7 +545,7 @@ case 'PLAY': {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await search(q)
+                const result = await search(url.id)
                 await downloadVideo(result[0].id)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
@@ -556,7 +556,7 @@ case 'PLAY': {
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
             if (url.status == 'true') {
-                const result = await search(q)
+                const result = await search(url.id)
                 await downloadAudio(result[0].id)
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             } else {
