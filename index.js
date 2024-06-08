@@ -530,7 +530,7 @@ case 'PLAY': {
     function downloadAudio(url) {
         const outputPath = path.join(__dirname, 'tmp', 'ytmp3.mp3');
         return new Promise((resolve, reject) => {
-            ytdl(youtubeURL, { filter: 'audioonly', quality: 'highestaudio' })
+            ytdl(url, { filter: 'audioonly', quality: 'highestaudio' })
                 .pipe(fs.createWriteStream(outputPath))
                 .on('finish', () => { resolve(`Audio descargado a ${outputPath}`) })
                 .on('error', (err) => reject(err));
@@ -544,6 +544,7 @@ case 'PLAY': {
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const url = await urlDecoded(q)
+            console.log(url)
             if (url.status == 'true') {
                 const result = await search(url.id)
                 await downloadVideo(result[0].id)
@@ -555,6 +556,7 @@ case 'PLAY': {
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const url = await urlDecoded(q)
+            console.log(url)
             if (url.status == 'true') {
                 const result = await search(url.id)
                 await downloadAudio(result[0].id)
