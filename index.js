@@ -651,7 +651,7 @@ case 'PLAY': {
                 interactiveMessage: {
                     header: { title: 'Viviana Bot Vip', hasMediaAttachment: true, imageMessage: media.imageMessage },
                     headerType: 'IMAGE',
-                    body: { text: `aqui va la info del video`, footer: { text: `el footer`} },
+                    body: { text: `aqui va la info del video`}, footer: { text: `el footer`},
                     nativeFlowMessage: {
                         buttons: [
                             { name: "quick_reply", buttonParamsJson: JSON.stringify({ display_text: "Download Mp4", id: `.ytmp4 ${result.url}` })},
