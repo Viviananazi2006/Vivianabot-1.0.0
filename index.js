@@ -520,8 +520,8 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const result = await urlDecoded(url)
-        const videoId = await result.id ? url : 'error'
+        const data = await urlDecoded(url)
+        const videoId = await data.id ? url : 'error'
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + videoId, { lang: 'id' });
         const format = ytdl.chooseFormat(videoInfo.formats, { format: 132, filter: 'videoandaudio' })
         const result = {
