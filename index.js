@@ -520,8 +520,7 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        if (!url) throw new Error('Video ID or YouTube Url is required')
-        const videoId = this.isYTUrl(url) ? this.getVideoID(url) : url
+        const videoId = await urlDecoded(url) ? url : 'error'
         const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + videoId, { lang: 'id' });
         const format = ytdl.chooseFormat(videoInfo.formats, { format: quality, filter: 'videoandaudio' })
         const result = {
