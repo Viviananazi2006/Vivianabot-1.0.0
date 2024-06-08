@@ -643,10 +643,11 @@ case 'PLAY': {
                 await vm.sendMessage(from, { audio: { url: './tmp/ytmp3.mp3' }, mimetype: 'audio/mp4', caption: 'send audio'})
             }
         } else if (["play", "Play", "PLAY"].includes(comando)) {
-            const result = await search(q)
-            await downloadVideo(result[0].url)
+            const data = await search(q)
+            const result = data[0]
+            await downloadVideo(result.url)
             let media = await prepareWAMessageMedia({ image: {url: result.Thumbnail } }, { upload: vm.waUploadToServer });
-            await vm.relayMessage(m.from, {
+            await vm.relayMessage(from, {
                 interactiveMessage: {
                     header: { title: 'Viviana Bot Vip', hasMediaAttachment: true, imageMessage: media.imageMessage },
                     headerType: 'IMAGE',
