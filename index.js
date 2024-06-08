@@ -494,7 +494,7 @@ case 'Play':
 case 'YTMP4':
 case 'YTMP3':
 case 'PLAY': {
-    if (args.join(' ')) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
+    if (q) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
     async function search(param) {
         const search = await ytSearch(param);
         
@@ -511,22 +511,14 @@ case 'PLAY': {
         }));
         return result
     }
-    
-    function urlDetect(url) {
-        const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-        return regex.test(url);
-    }
-
 
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const _text = await args.join(' ')
-            const result = await search(_text)
+            const result = await search(q)
             const stream = await ytdl(result.url, { filter: 'audioandvideo', quality: 'highestvideo' });
             await vm.sendMessage(from, { video: { url: stream }, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            const _text = await args.join(' ')
-            const result = await search(_text)
+            const result = await search(q)
             const stream = await ytdl(youtubeURL, { filter: 'audioonly', quality: 'highestaudio' });
             await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
