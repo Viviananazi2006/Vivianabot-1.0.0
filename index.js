@@ -5,6 +5,7 @@ const clc = require("cli-color")
 const cfonts = require('cfonts')
 const ytSearch = require('yt-search');
 const ytdl = require('ytdl-core');
+const { PassThrough } = require('stream');
 const chalk = import('chalk')
 const fs = require('fs')
 
@@ -511,7 +512,19 @@ case 'PLAY': {
         }));
         return result
     }
-
+    
+    async function sendAudio(url) {
+        const audioStream = ytdl(url, { filter: 'audioonly', quality: 'highestaudio' });
+        const passThrough = new PassThrough();
+        let buffer = Buffer.from([]);
+    
+        audioStream.pipe(passThrough);
+    
+        passThrough.on('data', (chunk) => {
+            buffer = Buffer.concat([audioBuffer, chunk]);
+        })
+        return buffer
+    }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
             const result = await search(q)
@@ -519,9 +532,8 @@ case 'PLAY': {
             await vm.sendMessage(from, { video: stream, caption: 'send video'})
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
             const result = await search(q)
-            console.log(result[0])
-            const stream = await ytdl(result[0].url, { filter: 'audioonly', quality: 'highestaudio' });
-            await vm.sendMessage(from, { audio: stream, caption: 'send audio'})
+            const stream = await sendAudio(result.url)
+            await vm.sendMessage(from, { audio: { url: stream }, caption: 'send audio'})
         } else if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
                 
         }
@@ -579,10 +591,4 @@ console.log('Error : %s', color(e, 'yellow'))
 }
 // run in main file
 connectToWhatsApp()
-
-
-
-
-
-
 
