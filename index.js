@@ -565,7 +565,7 @@ case 'PLAY': {
     }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const url = await urlDecoded(q)
+            const url = urlDecoded(q)
             console.log(url.status)
             if (url.status === 'true') {
                 const result = await searchUrl(q)
