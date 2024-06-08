@@ -538,6 +538,7 @@ case 'PLAY': {
             quality: format.qualityLabel,
         }
         return result;
+    }
 
 
     function downloadVideo(url) {
@@ -569,7 +570,7 @@ case 'PLAY': {
             console.log(url)
             if (url.status) {
                 const result = await searchUrl(q)
-                console.log('1-- ' + result.id + '\n\n' + url.id)
+                console.log('1-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result.url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
