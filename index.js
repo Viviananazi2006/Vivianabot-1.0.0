@@ -520,19 +520,23 @@ case 'PLAY': {
     }
 
     async function searchUrl(url) {
-        const info = await ytdl.getInfo(url);
+        if (!url) throw new Error('Video ID or YouTube Url is required')
+        const videoId = this.isYTUrl(url) ? this.getVideoID(url) : url
+        const videoInfo = await ytdl.getInfo('https://www.youtube.com/watch?v=' + videoId, { lang: 'id' });
+        const format = ytdl.chooseFormat(videoInfo.formats, { format: quality, filter: 'videoandaudio' })
         const result = {
             type: 'video',
-            title: info.videoDetails.title,
-            url: `https://www.youtube.com/watch?v=${info.videoDetails.videoId}`,
-            id: info.videoDetails.videoId,
-            thumbnail: info.videoDetails.thumbnails[0].url,
-            author: { name: info.videoDetails.author.name, url: `https://www.youtube.com/channel/${info.videoDetails.author.id}` },
-            description: info.videoDetails.description,
-            views: info.videoDetails.viewCount,
-            duration: info.videoDetails.lengthSeconds,
-            date: info.videoDetails.uploadDate
-        };
+            title: videoInfo.videoDetails.title,
+            url: format.url,
+            id: videoId,
+            Thumbnail: videoInfo.videoDetails.thumbnails.slice(-1)[0],
+            author: videoInfo.videoDetails.ownerChannelName,
+            description:videoInfo.videoDetails.description,
+            contentLength: format.contentLength,
+            duration: videoInfo.videoDetails.lengthSeconds,
+            date: videoInfo.videoDetails.publishDate,
+            quality: format.qualityLabel,
+        }
         return result;
     }
 
