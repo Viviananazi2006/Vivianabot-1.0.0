@@ -546,14 +546,14 @@ case 'PLAY': {
                 .on('error', (err) => reject(err));
         });
     }
-    function url(url) {
+    function uri(url) {
         const regex = /(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
         const match = url.match(regex);
         return match ? { status: true, id: match[1] } : { status: false };
     }
     if (deviceType === 'Android') {
         if (["ytmp4", "YTMP4", "Ytmp4"].includes(comando)) {
-            const url = await url(q)
+            const url = await uri(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
                 await downloadVideo(result.url)
@@ -564,7 +564,7 @@ case 'PLAY': {
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
         } else if (["ytmp3", "YTMP3", "Ytmp3"].includes(comando)) {
-            const url = await url(q)
+            const url = await uri(q)
             if (url.status == 'true') {
                 const result = await search(url.id)
                 await downloadAudio(result.url)
