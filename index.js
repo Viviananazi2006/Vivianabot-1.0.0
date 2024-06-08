@@ -568,10 +568,12 @@ case 'PLAY': {
             console.log(url)
             if (url.status) {
                 const result = await searchUrl(url.id)
+                console.log('1-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             } else {
                 const result = await search(q)
+                console.log('2-- ' + result + '\n\n' + url.id)
                 await downloadVideo(result[0].url)
                 await vm.sendMessage(from, { video: { url: './tmp/ytmp4.mp4' }, caption: 'send video'})
             }
