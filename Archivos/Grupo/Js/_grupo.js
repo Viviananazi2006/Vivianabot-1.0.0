@@ -1,5 +1,5 @@
 const fs = require('fs')
-const ruta = './Archivos/Grupo/Js/_grupo.json'
+const ruta = './Archivos/Grupo/Json/_grupo.json'
 
 const grup = JSON.parse(fs.readFileSync(ruta))
 
