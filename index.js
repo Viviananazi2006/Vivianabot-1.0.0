@@ -406,7 +406,8 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     expiredGrupo()
    
    if(isMuteGp){
-   if(!isOwner && comando || isCmd ) return 
+   if(!isOwner) return 
+   if(isCmd) return 
    }
    
    
