@@ -695,6 +695,10 @@ case 'PLAY': {
     break
 }
 
+case 'tiktok':
+case 'tt': {
+await sock.sendMessage(from, { text: 'gei' } )
+}
 /*
     @media
 */
