@@ -63,8 +63,8 @@ expiredGrupo
 
 
  // JSON
- const Exportion = JSON.parse(fs.readFileSync('./Arch/Games/Json/exportion.json'))
- const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/exportion1.json'))
+ const Exportion = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion.json'))
+ const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion1.json'))
  
  
 const prefixo = "."
