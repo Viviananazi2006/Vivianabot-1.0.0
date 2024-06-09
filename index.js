@@ -405,8 +405,7 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     expiredTTTOff()
     expiredGrupo()
    
-   if(isMuteGp){
-   if(!isOwner) return 
+   if(isMuteGp && !isOwner){
    if(isCmd) return 
    }
    
