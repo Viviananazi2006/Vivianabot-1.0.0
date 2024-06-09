@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { addCoin } = require('../../Grupo/Js/_reg.js')
-const ruta = './src/Games/Json/tictactoe.json'
+const ruta = './Archivos/Games/Json/tictactoe.json'
 const TTT = JSON.parse(fs.readFileSync(ruta))
 const apuesta = 50
             /*
