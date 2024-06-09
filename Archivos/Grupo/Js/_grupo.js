@@ -38,5 +38,5 @@ module.exports = {
 addGrupo , 
 delGrupo , 
 checkGrupo , 
-exipiredGrupo
+expiredGrupo
 }

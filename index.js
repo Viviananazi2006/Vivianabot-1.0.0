@@ -54,6 +54,12 @@ expiredTTT,
 expiredTTTOff, checkUserTTT1 , checkUserTTT2
 } = require('./Archivos/Games/Js/tictactoe.js')
 
+const {
+addGrupo , 
+delGrupo , 
+checkGrupo , 
+expiredGrupo
+} = require('./Archivos/Grupo/Js/_grupo.js')
 
 const prefixo = "."
 
@@ -338,6 +344,8 @@ return buffer}
   const isTTT = await checkTTT(from)
   const isTttOff = await checkTTTOff(sender)
   
+  const isMuteGp = await checkGrupo(from)
+
   const coin = await coins(sender)
   
 // MENSAJES EN CONSOLA 
@@ -388,12 +396,19 @@ color('\n  ╰ ── ✦ き⃟⃟「','lime'),color(' 𝐏𝐑𝐈𝐕𝐀𝐓
 )
 }    
 
+
 if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     fs.mkdirSync(path.join(__dirname, 'tmp'));
 }
  
  expiredTTT()
     expiredTTTOff()
+    exipiredGrupo
+   
+   if(isMuteGp){
+   if(isCmd || comando ) return 
+   }
+   
    
    if(fs.existsSync(`./tmp/ttt_${from}.json`)){
    if(['acepto','.asepto','Acepto'].some(i => body.startsWith(i))){
@@ -928,6 +943,21 @@ await vm.sendMessage(from , audio , {quoted : info})
   }
   break 
     
+  case 'mute' : {
+  if(args[0] === 'on') {
+    if(isMuteGp) return send('El grupo ya esta muteado')
+    await addGrupo(from)
+    send('El grupo fue muteado')
+  } else if (args[0] === 'off') {
+    if(!isMuteGp) return send('El grupo ya esta desmuteado')
+    await delGrupo(from)
+    send('El grupo fue desmuteado')
+  } else {
+    send('seleccione on/off')
+  }
+  }
+  break 
+   
 
 // COMANDOS SIN PREFIJO
 default:
