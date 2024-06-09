@@ -944,6 +944,7 @@ await vm.sendMessage(from , audio , {quoted : info})
   break 
     
   case 'mute' : {
+    if(!isOwner) return 
   if(args[0] === 'on') {
     if(isMuteGp) return send('El grupo ya esta muteado')
     await addGrupo(from)
