@@ -892,6 +892,43 @@ case 'tagall' : {
 }
 break
   
+  case 'open' : 
+  case 'abrir' :
+  case 'ver' : {
+ 
+const img = info?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2?.message?.imageMessage
+
+const vid = info?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2?.message?.videoMessage
+
+const audio = info?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2Extension?.message?.audioMessage
+
+if(!isGrupo) return 
+if(!isGroupAdmins) return send('no eres un administrador')
+if(!isBotGroupAdmins) return send('el bot debe ser administrador')
+if (img) {
+  send('[✅] Espere un momento por favor')
+img.viewOnce = false
+img.image = { url : img.url }
+img.caption += ' - img revelada ╰‿╯-'
+await vm.sendMessage(from , img , {quoted : info})
+} else if (vid) {
+  send('[✅] Espere un momento por favor')
+vid.viewOnce = false
+vid.video = { url : vid.url }
+vid.caption += ' - video revelado ╰‿╯ -'
+await vm.sendMessage(from , vid , {quoted : info})
+} else if (audio) {
+    send('[✅] Espere un momento por favor')
+audio.viewOnce = false
+audio.audio = { url : audio.url }
+await vm.sendMessage(from , audio , {quoted : info})
+} else {
+  send('Marque un video , imagen o audio de una sola visualización')
+}
+  }
+  break 
+    
+
 // COMANDOS SIN PREFIJO
 default:
 
