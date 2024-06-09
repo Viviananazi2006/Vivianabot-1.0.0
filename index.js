@@ -954,7 +954,7 @@ if((prob === "🍓 : 🍓 : 🍓" || prob === "🍑 : 🍑 : 🍑" || prob === "
  `
 
 ]
-let { key } = await sock.sendMessage(from, {text: `    🎰 ɢɪʀᴀɴᴅᴏ  ᴛʀᴀɢᴀᴍᴏɴᴇᴅᴀs 🎰`}, {quoted: info})
+let { key } = await vm.sendMessage(from, {text: `    🎰 ɢɪʀᴀɴᴅᴏ  ᴛʀᴀɢᴀᴍᴏɴᴇᴅᴀs 🎰`}, {quoted: info})
 
 for(let i = 0 ; i < casssino.length; i++) {
 await vm.sendMessage(from, {text: casssino[i], edit: key }, {quoted: info})
