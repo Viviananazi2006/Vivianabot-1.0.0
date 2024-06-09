@@ -439,9 +439,9 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
        const partywin = ` *𝙵𝙴𝙻𝙸𝙲𝙸𝙳𝙰𝙳𝙴𝚂 𝚁𝙴𝚂𝙿𝚄𝙴𝚂𝚃𝙰 𝙲𝙾𝚁𝚁𝙴𝙲𝚃𝙰*
         • ${pushname}
    √ Tu Recompensa :
-      • + 25 Coins`
+      • + 10 Coins`
     send(partywin)
-      await addCoin(sender ,25)
+      await addCoin(sender ,10)
  await fs.unlinkSync(`./tmp/Game_${from}.json`)
        await sleep(1000)
          }
