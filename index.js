@@ -697,7 +697,9 @@ case 'PLAY': {
 
 case 'tiktok':
 case 'tt': {
-await sock.sendMessage(from, { text: 'gei' } )
+if (deviceType === 'Android') {
+sock.sendMessage(from, { text: ' hi' })
+}
 }
 break
 case 'instagram':
