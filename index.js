@@ -702,6 +702,7 @@ vm.sendMessage(from, { text: ' hi' })
 }
 }
 break
+
 case 'instagram':
 case 'ig': {
 }
@@ -711,6 +712,11 @@ case 'facebook':
 case 'fb': {
     vm.sendMessage(from, { text: 'gei'})
 }
+break
+
+case 'foto': {
+}
+break
 /*
     @media
 */
