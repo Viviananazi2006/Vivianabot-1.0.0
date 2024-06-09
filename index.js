@@ -897,7 +897,7 @@ break
 
 
 case 'casino':
-if(!isReg) return send(respuesta.registro)
+if(!isReg) return send('Usa .reg para registrarte')
 if(!q) return send('[❗] ᴄᴏʟᴏǫᴜᴇ ʟᴀ ᴄᴀɴᴛɪᴅᴀᴅ ᴀ ᴀᴘᴏsᴛᴀʀ ')
 const monto = args[0]
  if(isNaN(monto)) return await send('ᴇʟ ᴍᴏɴᴛᴏ ᴅᴇʙᴇ sᴇʀ ᴜɴ ɴᴜᴍᴇʀᴏ')
