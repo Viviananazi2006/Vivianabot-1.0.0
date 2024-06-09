@@ -403,7 +403,7 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
  
  expiredTTT()
     expiredTTTOff()
-    exipiredGrupo
+    expiredGrupo()
    
    if(isMuteGp){
    if(isCmd || comando ) return 
