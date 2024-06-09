@@ -873,6 +873,25 @@ await send('Error inesperado')
 }
 break 
 
+
+case 'tagall' : {
+ if(!isGrupo) return
+ if(!isGroupAdmins) return 
+ men_ = []
+ let teks = 'Miembros del Grupo \n'
+ for(let men of groupMembers){
+   teks += `• ${men.id.split('@')[0]}\n`
+   men_.push(men.id,true)
+ }
+ teks += 'Total : ${groupMembers.length}'
+   
+ vm.sendMessage(from , { 
+    text : teks,
+    mentions : men_
+ },{quoted : info})
+}
+break
+  
 // COMANDOS SIN PREFIJO
 default:
 
