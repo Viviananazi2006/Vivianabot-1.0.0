@@ -52,7 +52,7 @@ checkTimeOff,
 checkTTTOff,
 expiredTTT,
 expiredTTTOff, checkUserTTT1 , checkUserTTT2
-} = require('./src/Games/Js/tictactoe.js')
+} = require('./Archivos/Games/Js/tictactoe.js')
 
 
 const prefixo = "."
