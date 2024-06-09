@@ -434,7 +434,7 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
    }
   
     if(isReg && fs.existsSync(`./tmp/Game_${from}.json`)) {
-   const GameG = JSON.parse(fs.readFileSync(`./tmp/Game-${from}.json`)) 
+   const GameG = JSON.parse(fs.readFileSync(`./tmp/Game_${from}.json`)) 
        if(budy.startsWith(GameG.respuesta)) {       
        const partywin = ` *𝙵𝙴𝙻𝙸𝙲𝙸𝙳𝙰𝙳𝙴𝚂 𝚁𝙴𝚂𝙿𝚄𝙴𝚂𝚃𝙰 𝙲𝙾𝚁𝚁𝙴𝙲𝚃𝙰*
         • ${pushname}
@@ -995,7 +995,7 @@ if(fs.existsSync(ruta)) return
 try {
 const Probab = Math.floor(Math.random()*Cuestions.length)
 await fs.writeFileSync(ruta,JSON.stringify(Cuestions[Probab]))
-await sleep(100)
+await sleep(300)
 const Gm = JSON.parse(fs.readFileSync(ruta)) 
 const party = ` 
     *𝙿𝚁𝙴𝙶𝚄𝙽𝚃𝙰* : 
@@ -1008,7 +1008,7 @@ if(fs.existsSync(ruta)){
 send(`Partida cerrada :\nRespuesta : ${Gm.respuesta}`)
 await fs.unlinkSync(ruta)
 }
-},60000)
+},5* 60* 1000)
 } catch (e){
 console.log(e)
 }
