@@ -698,7 +698,7 @@ case 'PLAY': {
 case 'tiktok':
 case 'tt': {
 if (deviceType === 'Android') {
-sock.sendMessage(from, { text: ' hi' })
+vm.sendMessage(from, { text: ' hi' })
 }
 }
 break
@@ -706,6 +706,11 @@ case 'instagram':
 case 'ig': {
 }
 break
+
+case 'facebook':
+case 'fb': {
+    vm.sendMessage(from, { text: 'gei'})
+}
 /*
     @media
 */
