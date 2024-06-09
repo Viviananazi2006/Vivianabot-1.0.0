@@ -39,6 +39,21 @@ coins , addCoin , delCoin, //addCoin(usuario , cantidad)
 vip , addVip , delVip // addVip(usuario)
 } = require('./Archivos/Grupo/Js/_reg.js')
 
+const { 
+addTTT , 
+movP1 , 
+movP2,
+checkWinner,
+tableroTTT,
+checkTTT,
+checkTurno,
+delTTT,
+checkTimeOff,
+checkTTTOff,
+expiredTTT,
+expiredTTTOff, checkUserTTT1 , checkUserTTT2
+} = require('./src/Games/Js/tictactoe.js')
+
 
 const prefixo = "."
 
@@ -187,6 +202,31 @@ const hora = new Date().toLocaleTimeString('MX', options)
  
  // CONSTANTES NUEVAS
  
+ 
+ 
+  const runtime = function(seconds) {
+    seconds = Number(seconds);
+    const days = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60); // Utilizando Math.floor() para asegurar que los segundos sean enteros
+    const parts = [];    
+    if (days > 0) {
+        parts.push(days + (days === 1 ? " 𝙳𝙸𝙰" : " 𝙳𝙸𝙰𝚂"));
+    }
+    if (hours > 0) {
+        parts.push(hours + (hours === 1 ? " ʜᴏʀᴀ" : " ʜᴏʀᴀs"));
+    }
+    if (minutes > 0) {
+        parts.push(minutes + (minutes === 1 ? "  ᴍɪɴᴜᴛᴏ" : " ᴍɪɴᴜᴛᴏs"));
+    }
+   if (remainingSeconds > 0) {
+    parts.push(remainingSeconds + (remainingSeconds === 1 ? " sᴇɢᴜɴᴅᴏ" : " sᴇɢᴜɴᴅᴏs"));
+    }    
+    return parts.join(', ');
+}
+
+
 const enviartexto = (texto) => {
  vm.sendMessage(from,{ text : texto }, {quoted : info})
  }
@@ -295,7 +335,8 @@ return buffer}
             
   const isReg = await checkReg(sender)
   const isVip = await vip(sender)
-  
+  const isTTT = await checkTTT(from)
+  const isTttOff = await checkTTTOff(sender)
   
   const coin = await coins(sender)
   
@@ -351,6 +392,27 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     fs.mkdirSync(path.join(__dirname, 'tmp'));
 }
  
+ expiredTTT()
+    expiredTTTOff()
+   
+   if(fs.existsSync(`./tmp/ttt_${from}.json`)){
+   if(['acepto','.asepto','Acepto'].some(i => body.startsWith(i))){
+   if(!isReg) return send('registrese para poder jugar')
+   if(isTttOff) return send('ᴜsᴛᴇᴅ ʏᴀ ᴀ ᴊᴜɢᴀᴅᴏ ᴀɴᴛᴇʀɪᴏʀᴍᴇɴᴛᴇ')
+   const ruta = `./tmp/ttt_${from}.json`
+   const TTT = JSON.parse(fs.readFileSync(ruta))
+   if(TTT.user1 === sender) return    
+   TTT.user2 = sender
+  fs.writeFileSync(ruta,JSON.stringify(TTT , null,2)+'\n') 
+     sleep(500)   
+   const { user1 , user2 } = TTT  
+   await addTTT(vm, user1, user2 , from , info)
+    sleep(500)
+    fs.unlinkSync(ruta)
+   }
+   }
+   
+   
 switch(comando){
 
  case 'bot' : {
@@ -695,6 +757,11 @@ case 'PLAY': {
     break
 }
 
+
+
+
+
+
 case 'tiktok':
 case 'tt': {
 if (deviceType === 'Android') {
@@ -720,6 +787,91 @@ break
 /*
     @media
 */
+
+
+/// [TIC TAC TOE]
+
+case 'ttt' : case 'tictactoe' :{
+if(q) return 
+const isGameOff = await checkTTTOff(sender)
+const ruta = `./tmp/ttt_${from}.json`
+if(!isGrupo) return send('solo en grupos')
+if(isTTT) return send('ya hay una partida en progreso')
+if(fs.existsSync(ruta)) return send('*ッ ʏᴀ ʜᴀʏ ᴜɴᴀ ᴘᴀʀᴛɪᴅᴀ ᴄʀᴇᴀᴅᴀ*')
+if(isGameOff) {
+const timeGameOff = await checkTimeOff(sender)
+const ahora = Date.now()
+const result = timeGameOff - ahora 
+const total = result / 1000
+return send(`ᴘᴀʀᴀ ᴠᴏʟᴠᴇʀ ᴀ ᴊᴜɢᴀʀ :
+ᴇsᴘᴇʀᴇ : ${runtime(total)} `)
+} else {
+const obj = {
+user1 : sender,
+user2 : false
+}
+fs.writeFileSync(ruta,JSON.stringify(obj, null,2)+'\n')
+
+
+const teks = `
+ *╭ ─╺╺─「 ᴡᴀɪᴛɪɴɢ ᴘʟᴀʏᴇʀ 」─╼╺ ─ ╮*
+    ▢ Player 1 : @${sender.split('@')[0]}
+    ▢ Player 2 : 🔃 _ᴇsᴘᴇʀᴀɴᴅᴏ..._
+    ▢ Fecha : ahorita 
+    ▢ Apuesta : 50
+    ▢ Digite ✎ : Acepto  para jugar 
+ *╰╶╺╸╺╾ ─ ─ ─ ─ ─ ─ ─ ─ ─ ╼╸╺╸╶ ╯*  
+` 
+await send(teks , sender)
+
+
+setTimeout(() => {
+if(fs.existsSync(ruta)){
+fs.unlinkSync(ruta)
+}
+},5* 60* 1000)
+
+}
+}
+break 
+
+
+case 'mov' : case 'mover' : {
+const isTurno = await checkTurno(from)
+const user1 = await checkUserTTT1(from)
+const user2 = await checkUserTTT2(from)
+if(!isGrupo) return 
+if(!isTTT) return 
+if(!user1 === sender || !user2 === sender) return send('hbnnvh')
+if(isTurno === 'player1'){
+if(args[0] === 'a1' || args[0] === 'a2' || args[0] === 'a3' || args[0] === 'b1' || args[0] === 'b2' || args[0] === 'b3' || args[0] === 'c1' || args[0] === 'c2' || args[0] === 'c3'){
+await movP1(sender , args[0])
+ sleep(500)
+ await tableroTTT(vm , from , info , sender)
+ sleep(500)
+ await checkWinner(vm , from , info)
+ 
+} else {
+await send('[❌] movimiento invalido')
+}
+} else if(isTurno === 'player2'){
+if(args[0] === 'a1' || args[0] === 'a2' || args[0] === 'a3' || args[0] === 'b1' || args[0] === 'b2' || args[0] === 'b3' || args[0] === 'c1' || args[0] === 'c2' || args[0] === 'c3'){
+await movP2(sender , args[0])
+ sleep(500)
+ await tableroTTT(vm , from , info , sender)
+ sleep(500)
+ await checkWinner(vm , from , info)
+
+
+} else {
+await send('[❌] movimiento invalido')
+}
+
+} else {
+await send('Error inesperado')
+}
+}
+break 
 
 // COMANDOS SIN PREFIJO
 default:
