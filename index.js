@@ -61,6 +61,12 @@ checkGrupo ,
 expiredGrupo
 } = require('./Archivos/Grupo/Js/_grupo.js')
 
+
+ // JSON
+ const Exportion = JSON.parse(fs.readFileSync('./Arch/Games/Json/exportion.json'))
+ const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/exportion1.json'))
+ 
+ 
 const prefixo = "."
 
 function getGroupAdmins(participants) {
@@ -889,6 +895,86 @@ await send('Error inesperado')
 break 
 
 
+
+case 'casino':
+if(!isReg) return send(respuesta.registro)
+if(!q) return send('[❗] ᴄᴏʟᴏǫᴜᴇ ʟᴀ ᴄᴀɴᴛɪᴅᴀᴅ ᴀ ᴀᴘᴏsᴛᴀʀ ')
+const monto = args[0]
+ if(isNaN(monto)) return await send('ᴇʟ ᴍᴏɴᴛᴏ ᴅᴇʙᴇ sᴇʀ ᴜɴ ɴᴜᴍᴇʀᴏ')
+ if(monto > coin) return send('ɴᴏ ᴄᴜᴇɴᴛᴀ ᴄᴏɴ ᴇsᴀ ᴄᴀɴᴛɪᴅᴀᴅ ᴅᴇ ᴄᴏɪɴs')
+ if(monto > 51 ) return send('Maximo permitido 50 coins')
+ var prob = Exportion[Math.floor(Math.random() * Exportion.length)]
+var prob1 = Exportion1[Math.floor(Math.random() * Exportion1.length)]
+ var prob2 = Exportion1[Math.floor(Math.random() * Exportion1.length)]                     
+                       
+if((prob === "🍓 : 🍓 : 🍓" || prob === "🍑 : 🍑 : 🍑" || prob === "🍉 : 🍉 : 🍉" || prob === "🍊 : 🍊 : 🍊" || prob === "🥭 : 🥭 : 🥭" || prob === "🍋 : 🍋 : 🍋" || prob === "🥝 : 🥝 : 🥝" || prob === "🫐 : 🫐 : 🫐" || prob === "🍇 : 🍇 : 🍇" || prob === "🍏 : 🍏 : 🍏" || prob === "🍐 : 🍐 : 🍐" || prob === "🍌 : 🍌 : 🍌" || prob === "🥥 : 🥥 : 🥥" || prob === "🍒 : 🍒 : 🍒")) {
+              var Victoria = true 
+              var Victori = "【✔】Gano  🎉"
+            } else {
+              var Victoria = false
+              var Victori = "【✘】ᴘᴇʀᴅɪᴏ 😿"
+            }
+             
+     var casssino = [
+`
+        ❐ 🍌 : 🍇 : 🍒
+
+        ❐ 🍊 : 🍌 : 🥝
+
+        ❐ 🍎 : 🫐 : 🍇
+        
+         🎰 ɢɪʀᴀɴᴅᴏ 🎰
+`,
+ `
+        ❐ 🍊 : 🍌 : 🥝
+ 
+        ❐ 🍎 : 🫐 : 🍇
+ 
+        ❐ 🫐 : 🍊 : 🍌
+ 
+         🎰 ɢɪʀᴀɴᴅᴏ 🎰
+ `,
+ `
+        ❐ 🍎 : 🫐 : 🍇
+ 
+        ❐ 🫐 : 🍊 : 🍌
+ 
+        ❐ 🍉 : 🥭 : 🍋
+ 
+         🎰 ɢɪʀᴀɴᴅᴏ 🎰
+ `,
+ `
+        ❐ ${prob1}
+ 
+        ❐ ${prob} 
+ 
+        ❐ ${prob2} 
+        
+       ${Victori}
+ `
+
+]
+let { key } = await sock.sendMessage(from, {text: `    🎰 ɢɪʀᴀɴᴅᴏ  ᴛʀᴀɢᴀᴍᴏɴᴇᴅᴀs 🎰`}, {quoted: info})
+
+for(let i = 0 ; i < casssino.length; i++) {
+await vm.sendMessage(from, {text: casssino[i], edit: key }, {quoted: info})
+
+await new Promise(resolve => 
+setTimeout (resolve , 1000))
+}
+       if (Victoria === true ) {
+            const montoo = monto * 2
+              send('*ғᴇʟɪᴄɪᴅᴀᴅᴇs Ganaste* : ' +montoo + ' *coins*')             
+             await addCoin(sender,montoo)
+            } else {
+            const montooo = monto * 1
+            send(`*Lo siento perdiste* : ${montooo} coins`)
+       await delCoin(sender,montooo)
+            }
+            break
+            
+            
+            
 case 'tagall' : {
  if(!isGrupo) return
  if(!isGroupAdmins) return 
