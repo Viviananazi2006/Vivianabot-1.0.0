@@ -880,10 +880,10 @@ case 'tagall' : {
  men_ = []
  let teks = 'Miembros del Grupo \n'
  for(let men of groupMembers){
-   teks += `• ${men.id.split('@')[0]}\n`
+   teks += `• @${men.id.split('@')[0]}\n`
    men_.push(men.id,true)
  }
- teks += 'Total : ${groupMembers.length}'
+ teks += 'Total : ' + groupMembers.length;
    
  vm.sendMessage(from , { 
     text : teks,
