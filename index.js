@@ -699,6 +699,11 @@ case 'tiktok':
 case 'tt': {
 await sock.sendMessage(from, { text: 'gei' } )
 }
+break
+case 'instagram':
+case 'ig': {
+}
+break
 /*
     @media
 */
