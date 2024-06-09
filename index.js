@@ -65,8 +65,8 @@ expiredGrupo
  // JSON
  const Exportion = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion.json'))
  const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion1.json'))
- 
- 
+ const Cuestions = JSON.parse(fs.readFileSync('./Archivos/Games/Json/cuestions.json'))
+
 const prefixo = "."
 
 function getGroupAdmins(participants) {
@@ -432,8 +432,22 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     fs.unlinkSync(ruta)
    }
    }
-   
-   
+  
+    if(isReg && fs.existsSync(`./tmp/Game_${from}.json`)) {
+   const GameG = JSON.parse(fs.readFileSync(`./tmp/Game-${from}.json`)) 
+       if(budy.startsWith(GameG.respuesta)) {       
+       const partywin = ` *𝙵𝙴𝙻𝙸𝙲𝙸𝙳𝙰𝙳𝙴𝚂 𝚁𝙴𝚂𝙿𝚄𝙴𝚂𝚃𝙰 𝙲𝙾𝚁𝚁𝙴𝙲𝚃𝙰*
+        • ${pushname}
+   √ Tu Recompensa :
+      • + 25 Coins`
+    send(partywin)
+      await addCoin(sender ,25)
+ await fs.unlinkSync(`./tmp/Game_${from}.json`)
+       await sleep(1000)
+         }
+      }
+      
+  
 switch(comando){
 
  case 'bot' : {
@@ -974,6 +988,32 @@ setTimeout (resolve , 1000))
             break
             
             
+case 'game':{
+const ruta = `./tmp/Game_${from}.json`
+if(!isReg) return send(`registrate ${pushname}`)
+if(fs.existsSync(ruta)) return
+try {
+const Probab = Math.floor(Math.random()*Cuestions.length)
+await fs.writeFileSync(ruta,JSON.stringify(Cuestions[Probab]))
+await sleep(100)
+const Gm = JSON.parse(fs.readFileSync(ruta)) 
+const party = ` 
+    *𝙿𝚁𝙴𝙶𝚄𝙽𝚃𝙰* : 
+  _*${Gm.pregunta}*_
+  √ Recompensa :
+     •  + 10 Coins `
+    enviar(party)
+setTimeout(async () => {
+if(fs.existsSync(ruta)){
+send(`Partida cerrada :\nRespuesta : ${Gm.respuesta}`)
+await fs.unlinkSync(ruta)
+}
+},60000)
+} catch (e){
+console.log(e)
+}
+}
+break
             
 case 'tagall' : {
  if(!isGrupo) return
