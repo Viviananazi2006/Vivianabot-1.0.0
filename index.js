@@ -1002,7 +1002,7 @@ const party = `
   _*${Gm.pregunta}*_
   √ Recompensa :
      •  + 10 Coins `
-    enviar(party)
+   send(party)
 setTimeout(async () => {
 if(fs.existsSync(ruta)){
 send(`Partida cerrada :\nRespuesta : ${Gm.respuesta}`)
