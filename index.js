@@ -65,8 +65,8 @@ expiredGrupo
  // JSON
  const Exportion = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion.json'))
  const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion1.json'))
- const Cuestions = JSON.parse(fs.readFileSync('./Archivos/Games/Json/cuestions.json'))
-
+ 
+ 
 const prefixo = "."
 
 function getGroupAdmins(participants) {
@@ -432,22 +432,8 @@ if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
     fs.unlinkSync(ruta)
    }
    }
-  
-    if(isReg && fs.existsSync(`./tmp/Game_${from}.json`)) {
-   const GameG = JSON.parse(fs.readFileSync(`./tmp/Game_${from}.json`)) 
-       if(budy.startsWith(GameG.respuesta)) {       
-       const partywin = ` *𝙵𝙴𝙻𝙸𝙲𝙸𝙳𝙰𝙳𝙴𝚂 𝚁𝙴𝚂𝙿𝚄𝙴𝚂𝚃𝙰 𝙲𝙾𝚁𝚁𝙴𝙲𝚃𝙰*
-        • ${name}
-   √ Tu Recompensa :
-      • + 10 Coins`
-    send(partywin)
-      await addCoin(sender ,10)
- await fs.unlinkSync(`./tmp/Game_${from}.json`)
-       await sleep(1000)
-         }
-      }
-      
-  
+   
+   
 switch(comando){
 
  case 'bot' : {
@@ -792,18 +778,16 @@ case 'PLAY': {
     break
 }
 
-
-
-
-
-
 case 'tiktok':
 case 'tt': {
-if (deviceType === 'Android') {
-vm.sendMessage(from, { text: ' hi' })
+    if (deviceType === 'Android') {
+        vm.sendMessage(from, { text: ' hi' })
+        
+    } else if (!deviceType === 'Android') {
+        
+    }
+    break
 }
-}
-break
 
 case 'instagram':
 case 'ig': {
@@ -812,9 +796,42 @@ break
 
 case 'facebook':
 case 'fb': {
-    vm.sendMessage(from, { text: 'gei'})
+    const facebook = async (url) => {
+        return new Promise(async(resolve, reject) => {
+            await axios.get('https://downvideo.net/').then(gdata => {
+                const a = cheerio.load(gdata.data)
+                const token = a('body > div > center > div.col-md-10 > form > div > input[type=hidden]:nth-child(2)').attr('value')
+                const options = {
+                    method: "POST",
+                    url: `https://downvideo.net/download.php`,
+                    headers: {
+                        "content-type": 'application/x-www-form-urlencoded',
+                        "cookie": gdata["headers"]["set-cookie"],
+                        "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+                    },
+                    formData: {
+                        URL: url,
+                        token: token,
+                    },
+                };
+                request(options, async function(error, response, body) {
+                    if (error) throw new Error(error)
+                    const $ = cheerio.load(body)
+                    const result = {
+                        status: 200,
+                        title: $('body').find('div:nth-child(1) > h4').text(),
+                        sd: $('#sd > a').attr('href'),
+                        hd: $('body').find('div:nth-child(7) > a').attr('href')
+                    }
+                    resolve(result)
+                })
+            })
+        })
+    }
+    
+    await facebook('https://www.facebook.com/share/v/gBe3CDj2yGzcRMH9/?mibextid=O563ZM')
+    break
 }
-break
 
 case 'foto': {
 }
@@ -988,32 +1005,6 @@ setTimeout (resolve , 1000))
             break
             
             
-case 'game':{
-const ruta = `./tmp/Game_${from}.json`
-if(!isReg) return send(`registrate ${pushname}`)
-if(fs.existsSync(ruta)) return
-try {
-const Probab = Math.floor(Math.random()*Cuestions.length)
-await fs.writeFileSync(ruta,JSON.stringify(Cuestions[Probab]))
-await sleep(300)
-const Gm = JSON.parse(fs.readFileSync(ruta)) 
-const party = ` 
-    *𝙿𝚁𝙴𝙶𝚄𝙽𝚃𝙰* : 
-  _*${Gm.pregunta}*_
-  √ Recompensa :
-     •  + 10 Coins `
-   await send(party)
-setTimeout(async () => {
-if(fs.existsSync(ruta)){
-send(`Partida cerrada :\nRespuesta : ${Gm.respuesta}`)
-await fs.unlinkSync(ruta)
-}
-},5* 60* 1000)
-} catch (e){
-console.log(e)
-}
-}
-break
             
 case 'tagall' : {
  if(!isGrupo) return
@@ -1067,23 +1058,23 @@ await vm.sendMessage(from , audio , {quoted : info})
   send('Marque un video , imagen o audio de una sola visualización')
 }
   }
-  break 
+break 
     
-  case 'mute' : {
-    if(!isOwner) return 
-  if(args[0] === 'on') {
+case 'mute' : {
+if(!isOwner) return 
+if(args[0] === 'on') {
     if(isMuteGp) return send('El grupo ya esta muteado')
     await addGrupo(from)
     send('El grupo fue muteado')
-  } else if (args[0] === 'off') {
-    if(!isMuteGp) return send('El grupo ya esta desmuteado')
-    await delGrupo(from)
-    send('El grupo fue desmuteado')
-  } else {
-    send('seleccione on/off')
-  }
-  }
-  break 
+} else if (args[0] === 'off') {
+if(!isMuteGp) return send('El grupo ya esta desmuteado')
+await delGrupo(from)
+send('El grupo fue desmuteado')
+} else {
+send('seleccione on/off')
+}
+}
+break 
    
 
 // COMANDOS SIN PREFIJO
