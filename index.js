@@ -571,18 +571,26 @@ console.log(e)
 }
 }
 break 
+/// [ CONVERTIDORES ] ///
 
+case 'toimg': case 'Toimg': case 'TOIMG':
+
+if(!isQuotedSticker) return enviartexto('Por favor, *mencione un sticker* para ejecutar el comando.')
+try {
+enviartexto(respuesta.espere)
+const toimgq = '꫞ 𝑁𝑎𝑧𝑖 𝑉𝑖𝑣𝑖𝑎𝑛𝑎 𝑑𝑒𝑔𝑢𝑟𝑒𝑐ℎ𝑎𝑓𝑓 ꫞'
+buff = await getFileBuffer(info.message.extendedTextMessage.contextInfo.quotedMessage.stickerMessage, 'sticker')
+vm.sendMessage(from, {image: buff,caption : toimgq}, {quoted: info}).catch(e => {
+console.log(e);
+enviartexto('Ocurrio un error no convirtió *sticker para imagen.*')
+})
+} catch {
+enviartexto(respuesta.error())
+}
+break
 /// [ DOWNLOAD ] ///
 
-case 'ytmp4':
-case 'ytmp3':
-case 'play':
-case 'Ytmp4':
-case 'Ytmp3':
-case 'Play':
-case 'YTMP4':
-case 'YTMP3':
-case 'PLAY': {
+case 'ytmp4': case 'ytmp3': case 'play': case 'Ytmp4': case 'Ytmp3': case 'Play': case 'YTMP4': case 'YTMP3': case 'PLAY': {
     if (!q) return vm.sendMessage(from, { text: 'Ingrese una url/busqueda despues del comando.'})
     async function search(query) {
         const search = await ytSearch(query);
