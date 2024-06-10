@@ -9,7 +9,21 @@ const ytdl = require('ytdl-core');
 const { PassThrough } = require('stream');
 const chalk = import('chalk')
 const fs = require('fs')
-
+const util = require("util")
+const ffmpeg = require("fluent-ffmpeg")
+const axios = require('axios')
+const { exec, spawn, execSync } = require("child_process")
+const TelegraPh = require('./Archivos/telegraPh.js')
+const {videoToWebp,writeExifImg,writeExifVid,imageToWebp} = require('./Archivos/stickersss.js')
+const author = "꫞ 𝑁𝑎𝑧𝑖 𝑉𝑖𝑣𝑖𝑎𝑛𝑎 𝑑𝑒𝑔𝑢𝑟𝑒𝑐ℎ𝑎𝑓𝑓 ꫞"
+const getRandom = (ext) => { return `${Math.floor(Math.random() * 10000)}${ext}`
+}
+const getBuffer = (url, options) => new Promise(async (resolve, reject) => {
+          options ? options : {}
+          await axios({ method: "get", url, headers: { "DNT": 1, "Upgrade-Insecure-Request": 1 }, ...options, responseType: "arraybuffer" }).then((res) => {
+            resolve(res.data)
+          }).catch(reject)
+        })
 const sett =JSON.parse(fs.readFileSync('./config.json'))
 
 const { owner , status , botName } = sett[0]
@@ -300,6 +314,64 @@ const enviarmusica = (audios) => {
 + 'END:VCARD'
 
 vm.sendPoll = (jid, name = '', values = [], selectableCount = 1) => { return vm.sendMessage(jid, { poll: { name, values, selectableCount }}) }
+
+const enviarfiguvid = async (jid, path, quoted, options = {}) => {
+let buff = Buffer.isBuffer(path) ? path: /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64'): /^https?:\/\//.test(path) ? await (await getBuffer(path)): fs.existsSync(path) ? fs.readFileSync(path): Buffer.alloc(0)
+let buffer
+if (options && (options.packname || options.author)) {
+ buffer = await writeExifVid(buff, options)
+} else {
+ buffer = await videoToWebp(buff)
+}
+
+await vm.sendMessage(jid, {
+ sticker: {
+url: buffer
+ }, ...options
+}, {
+ quoted
+})
+return buffer
+ }
+ function isDoubleByte(str) {
+for (let i = 0, n = str.length; i < n; i++) {
+if (str.charCodeAt(i) > 255) {
+return true;
+}
+}
+return false;
+}
+
+const enviarfiguimg = async (jid, path, quoted, options = {}) => {
+let buff = Buffer.isBuffer(path) ? path: /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64'): /^https?:\/\//.test(path) ? await (await getBuffer(path)): fs.existsSync(path) ? fs.readFileSync(path): Buffer.alloc(0)
+let buffer
+if (options && (options.packname || options.author)) {
+ buffer = await writeExifImg(buff, options)
+} else {
+ buffer = await imageToWebp(buff)
+}
+
+await vm.sendMessage(jid, {
+ sticker: {
+url: buffer
+ }, ...options
+}, {
+ quoted
+})
+return buffer
+ }
+ 
+
+const fetchJson = (url, options) => new Promise(async (resolve, reject) => {
+fetch(url, options)
+.then(response => response.json())
+.then(json => {
+resolve(json)
+})
+.catch((err) => {
+reject(err)
+})
+})
  
  // CONSTANTES ISSS 
 const isImage = type == "imageMessage"
@@ -327,7 +399,9 @@ const isQuotedSticker = type === "extendedTextMessage" && content.includes("stic
 const isQuotedContact = type === "extendedTextMessage" && content.includes("contactMessage")
 const isQuotedLocation = type === "extendedTextMessage" && content.includes("locationMessage")
 const isQuotedProduct = type === "extendedTextMessage" && content.includes("productMessage")
-
+const mimetype = require('mime-types')
+const getExtension = async (type) => {
+	return await mimetype.extension(type)}
 const getFileBuffer = async (mediakey, MediaType) => {
 const stream = await downloadContentFromMessage(mediakey, MediaType)
 let buffer = Buffer.from([])
@@ -572,6 +646,61 @@ console.log(e)
 }
 break 
 /// [ CONVERTIDORES ] ///
+
+case 'figu': case "figu2" : case "stickergif":  case "stickergif2": case "s": case "f": case "fig": case "sticker":
+
+if ((isMedia && !info.message.videoMessage || isQuotedImage)) {
+enviartexto(respuesta.espere)
+ try {             
+streammmmm = await downloadContentFromMessage(info.message.imageMessage || info.message.extendedTextMessage?.contextInfo.quotedMessage.imageMessage, 'image')
+    var buffer = Buffer.from([])
+    for await(const chunk of streammmmm) {
+     buffer = Buffer.concat([buffer, chunk])
+    }
+    let ran = 'stickers.webp'
+    fs.writeFileSync(`./${ran}`, buffer)
+     ffmpeg(`./${ran}`)
+     .on("error", console.error)
+     .on("end", () => {
+      exec(`webpmux -set exif ./database/${ran} -o ./${ran}`, async (error) => {
+       await enviarfiguimg(from, fs.readFileSync(`./${ran}`), info, {
+ packname: `${name}`, author: `${author}`
+})
+        fs.unlinkSync(`./${ran}`)
+			       
+       })
+      })
+	 .addOutputOptions([
+       "-vcodec", 
+ 	   "libwebp", 
+ 	   "-vf", 
+	"scale=512:512:force_original_aspect_ratio=decrease,fps=15, pad=512:512:(ow-iw)/2:(oh-ih)/2:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse"
+	  ])
+	 .toFormat('webp')
+	 .save(`${ran}`)	 
+    } catch(e) {
+console.log(e)
+enviartexto("😒 *Ni para remarcar una imagen sirves*")
+}} else if ((isMedia && info.message.videoMessage.seconds < 11 || isQuotedVideo && info.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 11)) {
+enviartexto(respuesta.espere)
+try {
+
+const encmedia = isQuotedVideo ? info.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage: info.message.videoMessage
+rane = getRandom('.'+ await getExtension(encmedia.mimetype))
+imgbuff = await getFileBuffer(encmedia, 'video')
+fs.writeFileSync(rane, imgbuff)
+const media = rane
+ran = getRandom('.'+media.split('.')[1])
+const upload = await TelegraPh(media)
+await enviarfiguvid(from, util.format(upload), info, {
+ packname: `${name}`, author: `${author}`
+}) 
+fs.unlinkSync(rane)
+} catch(e) {
+console.log(e)
+enviartexto("😒 *Ni para remarcar una imagen sirves*")
+}}
+break
 
 case 'toimg': case 'Toimg': case 'TOIMG':
 
