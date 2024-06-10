@@ -948,9 +948,9 @@ const tiktok = async (url) => {
         return e
     }
 }
-const media = async tiktok(q)
+const media = await tiktok(q)
     if (deviceType === 'Android') {
-        vm.sendMessage(from, { video: {url: media} })
+        vm.sendMessage(from, { video: {url: media.media } })
         
     } else if (!deviceType === 'Android') {
         
