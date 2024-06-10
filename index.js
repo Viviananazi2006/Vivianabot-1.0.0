@@ -917,6 +917,7 @@ case 'ytmp4': case 'ytmp3': case 'play': case 'Ytmp4': case 'Ytmp3': case 'Play'
 
 case 'tiktok':
 case 'tt': {
+if (!q) return enviartexto("ingrese una url")
 const tiktok = async (url) => {
     try {
         const tokenn = await axios.get("https://downvideo.quora-wiki.com/tiktok-video-downloader#url=" + url);
@@ -947,8 +948,9 @@ const tiktok = async (url) => {
         return e
     }
 }
+const media = async tiktok(q)
     if (deviceType === 'Android') {
-        vm.sendMessage(from, { video: {url: tiktok.media} })
+        vm.sendMessage(from, { video: {url: media} })
         
     } else if (!deviceType === 'Android') {
         
