@@ -16,14 +16,13 @@ const { exec, spawn, execSync } = require("child_process")
 const TelegraPh = require('./Archivos/telegraPh.js')
 const {videoToWebp,writeExifImg,writeExifVid,imageToWebp} = require('./Archivos/stickersss.js')
 const author = "꫞ 𝑁𝑎𝑧𝑖 𝑉𝑖𝑣𝑖𝑎𝑛𝑎 𝑑𝑒𝑔𝑢𝑟𝑒𝑐ℎ𝑎𝑓𝑓 ꫞"
-const getRandom = (ext) => { return `${Math.floor(Math.random() * 10000)}${ext}`
-}
+const getRandom = (ext) => { return `${Math.floor(Math.random() * 10000)}${ext}`}
 const getBuffer = (url, options) => new Promise(async (resolve, reject) => {
-          options ? options : {}
-          await axios({ method: "get", url, headers: { "DNT": 1, "Upgrade-Insecure-Request": 1 }, ...options, responseType: "arraybuffer" }).then((res) => {
-            resolve(res.data)
-          }).catch(reject)
-        })
+    options ? options : {}
+    await axios({ method: "get", url, headers: { "DNT": 1, "Upgrade-Insecure-Request": 1 }, ...options, responseType: "arraybuffer" }).then((res) => {
+        resolve(res.data)
+    }).catch(reject)
+})
 const sett =JSON.parse(fs.readFileSync('./config.json'))
 
 const { owner , status , botName } = sett[0]
@@ -917,44 +916,57 @@ case 'ytmp4': case 'ytmp3': case 'play': case 'Ytmp4': case 'Ytmp3': case 'Play'
 
 case 'tiktok':
 case 'tt': {
-if (!q) return enviartexto("ingrese una url")
-const tiktok = async (url) => {
-    try {
-        const tokenn = await axios.get("https://downvideo.quora-wiki.com/tiktok-video-downloader#url=" + url);
-        let a = cheerio.load(tokenn.data);
-        let token = a("#token").attr("value");
-        const param = {
-            url: url,
-            token: token,
-        };
-        const { data } = await axios.request("https://downvideo.quora-wiki.com/system/action.php", {
-                method: "post",
-                data: new URLSearchParams(Object.entries(param)),
-                headers: {
-                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
-                    "referer": "https://downvideo.quora-wiki.com/tiktok-video-downloader",
-                },
-            }
-        );
-        return {
-            status: 200,
-            title: data.title,
-            thumbnail: "https:" + data.thumbnail,
-            duration: data.duration,
-            media: data.medias,
-        };
-    } catch (e) {
-        return e
+    if (!q) return enviartexto("ingrese una url")
+    const clean = data => {
+        let regex = /(<([^>]+)>)/gi
+        data = data.replace(/(<br?\s?\/>)/gi, ' \n')
+        return data.replace(regex, '')
     }
-}
-const media = await tiktok(q)
+    
+    async function shortener(url) {
+        return url
+    }
+    
+    const Tiktok = async query => {
+        let response = await axios('https://lovetik.com/api/ajax/search', {
+            method: 'POST',
+            data: new URLSearchParams(Object.entries({ query }))
+        })
+        let result = {}
+        result.creator = 'YNTKTS'
+        result.title = clean(response.data.desc)
+        result.author = clean(response.data.author)
+        result.nowm = await shortener((response.data.links[0].a || '').replace('https', 'http'))
+        result.watermark = await shortener((response.data.links[1].a || '').replace('https', 'http'))
+        result.audio = await shortener((response.data.links[2].a || '').replace('https', 'http'))
+        result.thumbnail = await shortener(response.data.cover)
+        return result
+    }
+    const data = await Tiktok(q)
     if (deviceType === 'Android') {
-        vm.sendMessage(from, { video: {url: media.media } })
-        
+        let media = await prepareWAMessageMedia({ video: {url: data.nowm } }, { upload: vm.waUploadToServer });
+        await vm.relayMessage(from, {
+            botInvokeMessage: {
+                message: {
+                    messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
+                    interactiveMessage: {
+                        header: { title: 'TikTok Vip', hasMediaAttachment: true, videoMessage: media.videoMessage },
+                        headerType: 'VIDEO',
+                        body: { text: data.author, }, footer: { text: data.title },
+                        nativeFlowMessage: {
+                            buttons: [
+                                { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
+                                { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
+                            ],
+                            messageParamsJson: "",
+                        }
+                    }
+                }
+            }
+        }).then((r) => console.log(r));
     } else if (!deviceType === 'Android') {
-        
-    }
+        vm.sendMessage(from, { video: { url: media.nowm }, caption: `○ *Autor:* ${media.author}\n○ *Titulo:* ${media.title}` })
+    } 
     break
 }
 
@@ -965,40 +977,12 @@ break
 
 case 'facebook':
 case 'fb': {
-    const facebook = async (url) => {
-        return new Promise(async(resolve, reject) => {
-            await axios.get('https://downvideo.net/').then(gdata => {
-                const a = cheerio.load(gdata.data)
-                const token = a('body > div > center > div.col-md-10 > form > div > input[type=hidden]:nth-child(2)').attr('value')
-                const options = {
-                    method: "POST",
-                    url: `https://downvideo.net/download.php`,
-                    headers: {
-                        "content-type": 'application/x-www-form-urlencoded',
-                        "cookie": gdata["headers"]["set-cookie"],
-                        "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
-                    },
-                    formData: {
-                        URL: url,
-                        token: token,
-                    },
-                };
-                request(options, async function(error, response, body) {
-                    if (error) throw new Error(error)
-                    const $ = cheerio.load(body)
-                    const result = {
-                        status: 200,
-                        title: $('body').find('div:nth-child(1) > h4').text(),
-                        sd: $('#sd > a').attr('href'),
-                        hd: $('body').find('div:nth-child(7) > a').attr('href')
-                    }
-                    resolve(result)
-                })
-            })
-        })
-    }
-    
-    await facebook('https://www.facebook.com/share/v/gBe3CDj2yGzcRMH9/?mibextid=O563ZM')
+    const { savefrom, facebookdl, facebookdlv2 } = require('@bochilteam/scraper') 
+    if (!q) return enviartexto('falta url')
+    if (deviceType === 'Android') {
+        const { result } = await facebookdl(q).catch(async () => await facebookdlv2(q)).catch(async () => await savefrom(q))
+        for (const { url, isVideo } of result.reverse()) await vm.sendMessage(from, {video: {url: url}, caption: '🍟 Video de facebook'}, {quoted: info })
+    } else {}
     break
 }
 
