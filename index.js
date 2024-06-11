@@ -1170,6 +1170,34 @@ setTimeout (resolve , 1000))
             break
             
             
+case 'game': 
+if(!isReg) return send(`registrate usando .reg`)
+if(fs.existsSync(`./tmp/Game_${from}.json`)) return send('ya se encuentra un juego activo en este Grupo') 
+try {
+const Probab = Math.floor(Math.random()*Cuestions.length)
+await fs.writeFileSync(`./tmp/Game_${from}.json`, JSON.stringify(Cuestions[Probab]))
+await sleep(100)
+const Gm = JSON.parse(fs.readFileSync(`./tmp/Game_${from}.json`)) 
+const party = ` 
+  * Cuestion - 𝙿𝚁𝙴𝙶𝚄𝙽𝚃𝙰* : 
+  _*${Gm.pregunta}*_
+  √ Recompensa :
+     • 10 Coins `
+    send(party)
+setTimeout(async () => {
+if(fs.existsSync(`./tmp/Game_${from}.json`)){
+send(`La partida fue cerrada : \n Respuesta : ${Gm.respuesta}`)
+await fs.unlinkSync(`./tmp/Game_${from}.json`)
+
+}
+}, 5* 60* 1000)
+} catch (e){
+console.log(e)
+}
+break
+
+            
+            
             
 case 'tagall' : {
  if(!isGrupo) return
