@@ -946,7 +946,7 @@ case 'tt': {
     
     if (deviceType === 'Android') {
         Tiktok(q).then(async (data) => {
-            let media = await prepareWAMessageMedia({ video: {url: data.nowm } }, { upload: vm.waUploadToServer });
+            let media = await prepareWAMessageMedia({ video: {url: data.watermark } }, { upload: vm.waUploadToServer });
             await vm.relayMessage(from, {
                 botInvokeMessage: {
                     message: {
