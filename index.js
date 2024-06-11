@@ -12,6 +12,8 @@ const fs = require('fs')
 const util = require("util")
 const ffmpeg = require("fluent-ffmpeg")
 const axios = require('axios')
+const
+const { savefrom, facebookdl, facebookdlv2 } = require('@bochilteam/scraper') 
 const { exec, spawn, execSync } = require("child_process")
 const TelegraPh = require('./Archivos/telegraPh.js')
 const {videoToWebp,writeExifImg,writeExifVid,imageToWebp} = require('./Archivos/stickersss.js')
@@ -977,7 +979,6 @@ break
 
 case 'facebook':
 case 'fb': {
-    const { savefrom, facebookdl, facebookdlv2 } = require('@bochilteam/scraper') 
     if (!q) return enviartexto('falta url')
     if (deviceType === 'Android') {
         const { result } = await facebookdl(q).catch(async () => await facebookdlv2(q)).catch(async () => await savefrom(q))
