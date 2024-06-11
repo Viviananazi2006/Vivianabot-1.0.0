@@ -928,7 +928,7 @@ case 'tt': {
         return url
     }
     
-    const Tiktok = async query => {
+    const Tiktok = async (query) => {
         let response = await axios('https://lovetik.com/api/ajax/search', {
             method: 'POST',
             data: new URLSearchParams(Object.entries({ query }))
@@ -943,28 +943,31 @@ case 'tt': {
         result.thumbnail = await shortener(response.data.cover)
         return result
     }
-    const data = await Tiktok(q)
+    
     if (deviceType === 'Android') {
-        let media = await prepareWAMessageMedia({ video: {url: data.nowm } }, { upload: vm.waUploadToServer });
-        await vm.relayMessage(from, {
-            botInvokeMessage: {
-                message: {
-                    messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
-                    interactiveMessage: {
-                        header: { title: 'TikTok Vip', hasMediaAttachment: true, videoMessage: media.videoMessage },
-                        headerType: 'VIDEO',
-                        body: { text: data.author, }, footer: { text: data.title },
-                        nativeFlowMessage: {
-                            buttons: [
-                                { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
-                                { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
-                            ],
-                            messageParamsJson: "",
+        Tiktok(q).then(async (data) => {
+            let media = await prepareWAMessageMedia({ video: {url: data.nowm } }, { upload: vm.waUploadToServer });
+            await vm.relayMessage(from, {
+                botInvokeMessage: {
+                    message: {
+                        messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {} },
+                        interactiveMessage: {
+                            header: { title: 'TikTok Vip', hasMediaAttachment: true, videoMessage: media.videoMessage },
+                            headerType: 'VIDEO',
+                            body: { text: data.author, }, footer: { text: data.title },
+                            nativeFlowMessage: {
+                                buttons: [
+                                    { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
+                                    { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
+                                ],
+                                messageParamsJson: "",
+                            }
                         }
                     }
                 }
-            }
-        }).then((r) => console.log(r));
+            }).then((r) => console.log(r));
+        })
+        
     } else if (!deviceType === 'Android') {
         vm.sendMessage(from, { video: { url: media.nowm }, caption: `○ *Autor:* ${media.author}\n○ *Titulo:* ${media.title}` })
     } 
