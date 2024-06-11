@@ -1028,12 +1028,12 @@ case 'foto': {
                 headerType: 'IMAGE',
                 body: { text: `(ФωФ) Viviana - Bot, Mientras tu estas de regreso, nosotros ya conquistamos polonia.`}, footer: { text: `○ Resultado: ${q}`},
                 nativeFlowMessage: {
-                    buttons: [
-                        { name: "quick_reply", buttonParamsJson: JSON.stringify({ display_text: "Download Mp4", id: `.ytmp4 ${result.url}` })},
-                        { name: "quick_reply", buttonParamsJson: JSON.stringify({ display_text: "Download Mp3", id: `.ytmp3 ${result.url}` })} 
-                    ],
-                    messageParamsJson: "",
-                },
+                                buttons: [
+                                    { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Site\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },
+                                    { "name": "cta_url", "buttonParamsJson": "{\"display_text\":\"Canal\",\"url\":\"https://exa.mx\",\"merchant_url\":\"https://exa.mx\"}" },                                     
+                                ],
+                                messageParamsJson: "",
+                            }
             },
             
         }, {})
