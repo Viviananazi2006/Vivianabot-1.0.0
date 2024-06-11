@@ -965,7 +965,7 @@ case 'tt': {
                         }
                     }
                 }
-            }).then((r) => console.log(r));
+            }, { quoted: info }).then((r) => console.log(r));
         })
         
     } else if (!deviceType === 'Android') {
