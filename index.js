@@ -226,7 +226,7 @@ const isOwner = await owners.some( i => sender.includes(i))
 const BotNumber = vm.user.id.split(':')[0]+'@s.whatsapp.net'
 const isGroupAdmins = groupAdmins.includes(sender) || false 
 const isBotGroupAdmins = groupAdmins.includes(BotNumber) || false
-const isUrl = (url) => { return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi')) }
+const isUrl2 = (url) => { return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi')) }
 const deviceType = info.key.id.length > 21 ? 'Android' : info.key.id.substring(0, 2) == '3A' ? 'IPhone' : 'WhatsApp web'
 const options = { timeZone: 'America/Cancun', hour12: false }
 const data = new Date().toLocaleDateString('MX', { ...options, day: '2-digit', month: '2-digit', year: '2-digit' })
