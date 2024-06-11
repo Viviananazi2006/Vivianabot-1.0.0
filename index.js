@@ -8,6 +8,7 @@ const ytSearch = require('yt-search');
 const ytdl = require('ytdl-core');
 const { PassThrough } = require('stream');
 const chalk = import('chalk')
+const cheerio = require('cheerio')
 const fs = require('fs')
 const util = require("util")
 const ffmpeg = require("fluent-ffmpeg")
