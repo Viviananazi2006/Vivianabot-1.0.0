@@ -85,7 +85,7 @@ addLink }  = require('./Archivos/Grupo/Js/anti_link.js')
  // JSON
  const Exportion = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion.json'))
  const Exportion1 = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion1.json'))
- 
+ const Cuestions = JSON.parse(fs.readFileSync('./Archivos/Games/Json/cuestions.json'))
  
 const prefixo = "."
 
