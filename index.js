@@ -1019,9 +1019,9 @@ case 'foto': {
             resolve(hasil)
         })})
     }
-    const media = await foto(q)
+    const data = await foto(q)
     if (deviceType === 'Android') {
-        let media = await prepareWAMessageMedia({ image: {url: media[0] } }, { upload: vm.waUploadToServer });
+        let media = await prepareWAMessageMedia({ image: {url: data[0] } }, { upload: vm.waUploadToServer });
         await vm.relayMessage(from, {
             interactiveMessage: {
                 header: { title: 'Viviana Bot Vip', hasMediaAttachment: true, imageMessage: media.imageMessage },
@@ -1038,7 +1038,7 @@ case 'foto': {
             
         }, {})
     } else {
-      elsock.sendMessage(from, { image: { url : media[0] }})
+      elsock.sendMessage(from, { image: { url : data[0] }})
     }
     
 }
