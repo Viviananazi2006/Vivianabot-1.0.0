@@ -75,6 +75,12 @@ checkGrupo ,
 expiredGrupo
 } = require('./Archivos/Grupo/Js/_grupo.js')
 
+const {
+addAnti_link ,
+delAnti_link , 
+checkAnti_link ,
+links , 
+addLink }  = require('./Archivos/Grupo/Js/anti_link.js')
 
  // JSON
  const Exportion = JSON.parse(fs.readFileSync('./Archivos/Games/Json/Exportion.json'))
@@ -423,7 +429,10 @@ return buffer}
   const isVip = await vip(sender)
   const isTTT = await checkTTT(from)
   const isTttOff = await checkTTTOff(sender)
-  
+  const isAnti_link = await checkAnti_link(from)  
+ const Links = links(from)
+ const isUrl = Links ? Links.some(i => body.includes(i)) : false
+ 
   const isMuteGp = await checkGrupo(from)
 
   const coin = await coins(sender)
@@ -1232,7 +1241,23 @@ send('seleccione on/off')
 }
 break 
    
-
+case 'antilink' : {
+  if(!isGrupo) return send('solo en grupos')
+  if(!isBotGroupAdmins) return send('El bot necesita ser administrador')
+  if(!isGroupAdmins) return send('No eres un administrador')
+  if(args[0] === 'on') {
+       if(isAnti_link) return send('El anti_link ya esta activo')
+        await addAnti_link(from,groupName)
+        await send('Anti_link activado exitosamente')
+    } else if(args[0] === 'off') {
+       if(!isAnti_link) return send('El anti_link ya esta desactivado')
+        await delAnti_link(from)
+        await send('Anti_link desactivado exitosamente')
+    } else {
+    await send('coloque : on/off')
+    }
+}
+break
 // COMANDOS SIN PREFIJO
 default:
 
@@ -1243,7 +1268,12 @@ default:
  
  
  
- 
+ if(isUrl) { 
+  if(!isAnti_link) return 
+  if(isGroupAdmins|| !isGrupo) return 
+  await vm.groupParticipantsUpdate(from, [sender], 'remove')
+vm.sendMessage(from, { delete: { remoteJid: from, fromMe: false, id: info.key.id, participant: [sender] } })
+  }
  
  
  
